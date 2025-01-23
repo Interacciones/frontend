@@ -14,7 +14,7 @@ function ReportTeacher({ onClose, teacher }) {
         event.preventDefault();
         onClose();
         try {
-            const response = await fetch(`${"https://raitesting.me"}/reports/create/${teacher.id}`, {
+            const response = await fetch(`${"http://localhost:3000"}/reports/create/${teacher.id}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

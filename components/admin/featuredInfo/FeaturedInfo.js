@@ -10,7 +10,7 @@ export default function FeaturedInfo() {
 
     const fetchStats = async () => {
         try {
-            const response = await fetch((`https://raitesting.me/admin-stats`), {
+            const response = await fetch((`http://localhost:3000/admin-stats`), {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

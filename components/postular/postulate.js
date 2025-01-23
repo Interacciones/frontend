@@ -60,7 +60,7 @@ function Postulate() {
       formData.append("photo", photo);
       formData.append("contactNumber", phone);
   
-      const response = await fetch(`https://raitesting.me/tutors/create`, {
+      const response = await fetch(`http://localhost:3000/tutors/create`, {
         method: 'POST',
         body: formData,
         headers: {

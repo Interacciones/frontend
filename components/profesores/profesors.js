@@ -9,7 +9,7 @@ function Profesores() {
   useEffect(() => {
     const getTeachers = async () => {
       try {
-        const res = await fetch(`${"https://raitesting.me"}/tutors/getAll?cacheBuster=${new Date().getTime()}`, 
+        const res = await fetch(`${"http://localhost:3000"}/tutors/getAll?cacheBuster=${new Date().getTime()}`, 
           {
             method: 'GET',
             headers: {

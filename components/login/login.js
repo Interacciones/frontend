@@ -42,7 +42,7 @@ function Login() {
           email,
           password
         );
-        await fetch((`https://raitesting.me/users/create-user`), {
+        await fetch((`http://localhost:3000/users`), {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -58,7 +58,8 @@ function Login() {
         await sendEmailVerification(createdUser);
         setRedirectUser(true)
       } catch({message}) {
-        setMessage("No se puede registrar con el email proporcionado");
+        // setMessage("No se puede registrar con el email proporcionado");
+        setMessage(message);
         setError(true);
       }
     } else {

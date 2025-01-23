@@ -19,7 +19,7 @@ export default function Profesor() {
         const getData = async () => {
             if (!id) return;
             try {
-                const teacherRes = await fetch(`https://raitesting.me/tutors/getTutor/${id}?cacheBuster=${new Date().getTime()}`,
+                const teacherRes = await fetch(`http://localhost:3000/tutors/getTutor/${id}?cacheBuster=${new Date().getTime()}`,
                     {
                         method: 'GET',
                         headers: {
@@ -31,7 +31,7 @@ export default function Profesor() {
                     );
                     const teacherData = await teacherRes.json();
                     setTeacher(teacherData);
-                    const commentsRes = await fetch(`https://raitesting.me/reviews/getByTutor/${id}?cacheBuster=${new Date().getTime()}`,
+                    const commentsRes = await fetch(`http://localhost:3000/reviews/getByTutor/${id}?cacheBuster=${new Date().getTime()}`,
                     {
                         method: 'GET',
                         headers: {

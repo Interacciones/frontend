@@ -25,7 +25,7 @@ export default function Postulaciones() {
   };
 
   const checkAdmin = async (currentUser) => {
-    const response = await fetch((`https://raitesting.me/admin/checkAdmin`), {
+    const response = await fetch((`http://localhost:3000/admin/checkAdmin`), {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

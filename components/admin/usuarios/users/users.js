@@ -40,7 +40,7 @@ export default function Users() {
 
   const fetchProfiles = async () => {
       try {
-        const response = await fetch(`https://raitesting.me/admin-users/getAll`, {
+        const response = await fetch(`http://localhost:3000/admin-users/getAll`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -95,8 +95,8 @@ export default function Users() {
 
       if ((actionType === 'banear' && isBlocked) || (actionType === 'desbanear' && !isBlocked)) {
         const actionUrl = actionType === 'banear'
-          ? `https://raitesting.me/admin-users/ban/${selectedUser.id}`
-          : `https://raitesting.me/admin-users/unban/${selectedUser.id}`;
+          ? `http://localhost:3000/admin-users/ban/${selectedUser.id}`
+          : `http://localhost:3000/admin-users/unban/${selectedUser.id}`;
 
         // Enviar la solicitud al backend
         await fetch(actionUrl, {

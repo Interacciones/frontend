@@ -60,7 +60,7 @@ export default function CommentsReports() {
 
     const fetchUpdate = async (datoDinamico) => {
         try {
-            const response = await fetch((`https://raitesting.me/reviewreports/update/${datoDinamico}`), {
+            const response = await fetch((`http://localhost:3000/reviewreports/update/${datoDinamico}`), {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ export default function CommentsReports() {
   
     const fetchDelete = async (datoDinamico) => {
         try {
-            const response = await fetch((`https://raitesting.me/reviewreports/update/${datoDinamico}`), {
+            const response = await fetch((`http://localhost:3000/reviewreports/update/${datoDinamico}`), {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -118,7 +118,7 @@ export default function CommentsReports() {
 
     const fetchReportes = async () => {
         try {
-            const response = await fetch(`https://raitesting.me/reviewreports/getPending`, {
+            const response = await fetch(`http://localhost:3000/reviewreports/getPending`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

@@ -37,7 +37,7 @@ function Actualizar() {
     const fetchProfile = async (currentUser) => {
       try {
         console.log(currentUser)
-        const response = await fetch(`https://raitesting.me/tutors/getOwn`, {
+        const response = await fetch(`http://localhost:3000/tutors/getOwn`, {
           method: 'GET',
           headers: {
             "Content-Type": "application/json",
@@ -91,7 +91,7 @@ function Actualizar() {
         console.log(value);
       }
   
-      const response = await fetch(`https://raitesting.me/tutors/update-tutor`, {
+      const response = await fetch(`http://localhost:3000/tutors/update-tutor`, {
         method: 'PATCH',
         body: formData,
         headers: {

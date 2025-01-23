@@ -42,7 +42,7 @@ function Login() {
           email,
           password
         );
-        await fetch((`https://raitesting.me/users/create-user`), {
+        await fetch((`http://localhost:3000/users`), {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

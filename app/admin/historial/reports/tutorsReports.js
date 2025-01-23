@@ -37,7 +37,7 @@ export default function TutorsReports() {
 
   const fetchReports = async () => {
       try {
-        const response = await fetch(`https://raitesting.me/admin-report/history`, {
+        const response = await fetch(`http://localhost:3000/admin-report/history`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

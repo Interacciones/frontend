@@ -37,7 +37,7 @@ export default function CommentsReports() {
 
   const fetchReports = async () => {
       try {
-        const response = await fetch(`https://raitesting.me/reviewreport/history`, {
+        const response = await fetch(`http://localhost:3000/reviewreport/history`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

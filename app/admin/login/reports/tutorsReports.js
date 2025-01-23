@@ -60,7 +60,7 @@ export default function TutorsReports() {
 
     const fetchUpdate = async (datoDinamico) => {
         try {
-            const response = await fetch((`https://raitesting.me/admin-reports/update/${datoDinamico}`), {
+            const response = await fetch((`http://localhost:3000/admin-reports/update/${datoDinamico}`), {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ export default function TutorsReports() {
     const fetchDelete = async (datoDinamico) => {
         try {
             // TODO
-            const response = await fetch((`https://raitesting.me/admin-reports/delete/${datoDinamico}`), {
+            const response = await fetch((`http://localhost:3000/admin-reports/delete/${datoDinamico}`), {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -105,7 +105,7 @@ export default function TutorsReports() {
 
     const fetchReportes = async () => {
         try {
-            const response = await fetch(`https://raitesting.me/admin-reports/Unreviewed`, {
+            const response = await fetch(`http://localhost:3000/admin-reports/Unreviewed`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

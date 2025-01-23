@@ -9,7 +9,7 @@ const ReportModal = ({ onClose, commentId, commentCreator }) => {
     const handleSubmit = async (event) => {
         onClose();
         try {
-            const response = await fetch(`${"https://raitesting.me"}/reviewReports/create`, {
+            const response = await fetch(`${"http://localhost:3000"}/reviewReports/create`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
