@@ -35,6 +35,7 @@ function Postulate() {
 
   useEffect(() => {
     onAuthStateChanged(auth, (currentUser) => {
+      console.log(currentUser);
       if (!currentUser) {
         setOpen(true);
         setMessage('Debes iniciar sesión para postular');
