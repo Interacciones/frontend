@@ -20,7 +20,6 @@ function Star({ filled, color, size }) {
     );
 }
 
-
 const Resume = ({ reviews, average }) => {
   const totalReviews = reviews.length;
   const stars = [0, 0, 0, 0, 0];   // 5 estrellas, 4 estrellas, 3 estrellas, 2 estrellas, 1 estrella, 0 estrellas
@@ -46,9 +45,7 @@ const Resume = ({ reviews, average }) => {
     return +(Math.round(num + "e+2")  + "e-2");
   }
 
-  
   return (
-
     <div className="md:w-1/2 lg:w-1/3 m-2 py-3 px-5 bg-white rounded-md shadow-md">
         <div className='flex place-items-center px-3'>
             <Star filled={true} color={"yellow-500"} size={5} />

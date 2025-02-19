@@ -24,7 +24,6 @@ function Star({ filled, onClick }) {
     );
 }
 
-
 export default function CommentForm({tutorId, email}) {
     const { user } = UserAuth();
     const [commentText, setCommentText] = useState("");
@@ -110,7 +109,6 @@ export default function CommentForm({tutorId, email}) {
             />
         );
     }
-
 
     if (user && !belongsToUser) {
         return (

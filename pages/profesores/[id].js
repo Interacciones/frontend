@@ -10,7 +10,7 @@ import Footer from '../../components/components/Footer';
 
 export default function Profesor() {
     const [teacher, setTeacher] = useState(null);
-    const [comments, setComments] = useState(null);
+    const [comments, setComments] = useState([]);
     const router = useRouter();
     const id = router.query.id;
     const [loaded, setLoaded] = useState(false);
@@ -19,7 +19,7 @@ export default function Profesor() {
         const getData = async () => {
             if (!id) return;
             try {
-                const teacherRes = await fetch(`http://localhost:3000/tutors/getTutor/${id}?cacheBuster=${new Date().getTime()}`,
+                const teacherRes = await fetch(`http://localhost:3000/tutors/${id}?cacheBuster=${new Date().getTime()}`,
                     {
                         method: 'GET',
                         headers: {
@@ -28,39 +28,29 @@ export default function Profesor() {
                             'Pragma': 'no-cache',
                         }
                     }
-                    );
-                    const teacherData = await teacherRes.json();
-                    setTeacher(teacherData);
-                    const commentsRes = await fetch(`http://localhost:3000/reviews/getByTutor/${id}?cacheBuster=${new Date().getTime()}`,
-                    {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Cache-Control': 'no-cache',
-                            'Pragma': 'no-cache',
-                        },
-                    });
-                    const commentsData = await commentsRes.json();
-                    setComments(commentsData);
-                    setLoaded(true);
-                } catch (error) {
-                    console.log(error);
-                }
+                );
+                const teacherData = await teacherRes.json();
+                setTeacher(teacherData.data);
+                setComments(teacherData.data.reviews);
+                setLoaded(true);
+            } catch (error) {
+                console.log(error);
             }
-            getData();
-        }, [id]);
-        
-        return (
-            <AuthContextProvider>
-        {loaded ? (
-            <>
-                <Header />
-                    <Page teacher={teacher} comments={comments} id={id}/>
-                <Footer />
-            </>
-        ) : (
-        <RouteLoader/>
-        )}
-    </AuthContextProvider>
-)
+        };
+        getData();
+    }, [id]);
+
+    return (
+        <AuthContextProvider>
+            {loaded ? (
+                <>
+                    <Header />
+                    <Page teacher={teacher} comments={comments} id={id} />
+                    <Footer />
+                </>
+            ) : (
+                <RouteLoader />
+            )}
+        </AuthContextProvider>
+    );
 }

@@ -3,7 +3,6 @@ import Comment from "./Comment";
 import CommentForm from "./ComForm";
 import Resume from "./ComResume";
 
-
 export default function CommentSection({ id, average, comments, email }) {
     return (
         <div className="w-full">
