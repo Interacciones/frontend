@@ -9,7 +9,7 @@ function Profesores() {
   useEffect(() => {
     const getTeachers = async () => {
       try {
-        const res = await fetch(`${"http://localhost:3000"}/tutors/getAll?cacheBuster=${new Date().getTime()}`, 
+        const res = await fetch(`${"http://localhost:3000"}/tutors?cacheBuster=${new Date().getTime()}`, 
           {
             method: 'GET',
             headers: {
@@ -20,10 +20,16 @@ function Profesores() {
           }
         )
         const data = await res.json();
-        setTeachers(data);
-        teachers.map((teacher) => {
-          teacher.fullName = `${teacher.name} ${teacher.lastName}`;
-        });
+        if (res.ok) {
+          const formattedTeachers = data.data.map((teacher) => ({
+            ...teacher,
+            fullName: `${teacher.name} ${teacher.lastName}`,
+            coursesInfo: teacher.courses,
+          }));
+          setTeachers(formattedTeachers);
+        } else {
+          console.error('Error fetching teachers:', data.message);
+        }
       } catch (error) {
         console.log(error);
         return [];
