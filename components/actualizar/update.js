@@ -115,7 +115,7 @@ function Actualizar() {
         console.log(value);
       }
   
-      const response = await fetch(`http://localhost:3000/tutors/update-tutor`, {
+      const response = await fetch(`http://localhost:3000/own-tutor`, {
         method: 'PATCH',
         body: formData,
         headers: {
