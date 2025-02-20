@@ -64,7 +64,7 @@ export default function CommentForm({tutorId, email}) {
         }
       
         try {
-            const response = await fetch(`${"http://localhost:3000"}/reviews/create`, {
+            const response = await fetch(`${"http://localhost:3000"}/reviews`, {
                 method: "POST",
                 headers: {
                     'Authorization': `Bearer ${user.stsTokenManager.accessToken}`,
@@ -73,7 +73,7 @@ export default function CommentForm({tutorId, email}) {
                 body: JSON.stringify({
                     "content": commentText,
                     "rating": rating,
-                    "TutorId": tutorId,
+                    "tutorId": tutorId,
                 }),
             });
             if (response.ok) {
