@@ -41,7 +41,7 @@ function Teacher( {props} ) {
           )}
         </div>
         <div className='absolute h-fit self-center flex flex-wrap justify-center w-[85%] mx-auto place-self-center -translate-y-40 group-hover:translate-y-[-15px] transition-all'>
-          <Star /> <h2 className='place-items-center font-semibold'>{roundToTwo(props.average)? roundToTwo(props.average) : "-"}</h2>
+          <Star /> <h2 className='place-items-center font-semibold'>{roundToTwo(props.avgRating)? roundToTwo(props.avgRating) : "-"}</h2>
         </div>
         <div className='overflow-hidden'>
           <h1 className='mx-auto w-full overflow-hidden whitespace-nowrap text-ellipsis font-bold text-center drop-shadow-[0_2px_3px_rgba(0,0,0,.6)] group-hover:drop-shadow-[0_2px_5px_rgba(0,0,0,.85)] transition-all text-xl mt-32'>{fullName}</h1>

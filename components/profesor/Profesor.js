@@ -1,8 +1,6 @@
 import Content from './Content';
 
 function Page({ id, teacher, comments }) {
-    console.log(teacher);
-    console.log(comments);
     return (
         <>
             {teacher !== null ? (

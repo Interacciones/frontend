@@ -3,7 +3,7 @@ import Comment from "./Comment";
 import CommentForm from "./ComForm";
 import Resume from "./ComResume";
 
-export default function CommentSection({ id, average, comments, email }) {
+export default function CommentSection({ id, average, comments, email, reviewAmount, oneStarReviews, twoStarReviews, threeStarReviews, fourStarReviews, fiveStarReviews }) {
     return (
         <div className="w-full">
             <CommentForm tutorId={id} email={email} />
@@ -14,7 +14,7 @@ export default function CommentSection({ id, average, comments, email }) {
                     </div>
                 ) : (
                     <div>
-                        <Resume reviews={comments} average={average} />
+                        <Resume average={average} reviewAmount={reviewAmount} oneStarReviews={oneStarReviews} twoStarReviews={twoStarReviews} threeStarReviews={threeStarReviews} fourStarReviews={fourStarReviews} fiveStarReviews={fiveStarReviews} />
                         {comments?.length === 0 ? (
                             <div>No hay comentarios</div>
                             ) : (
