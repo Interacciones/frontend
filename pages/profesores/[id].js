@@ -1,7 +1,7 @@
 "use client";
 import Page from "../../components/profesor/Profesor";
 import { AuthContextProvider } from '../../components/context/AuthContext';
-import '../../components/globals.css';
+import '../../app/globals.css';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import RouteLoader from "../../components/components/RouteLoader";
