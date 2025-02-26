@@ -1,7 +1,7 @@
 "use client";
 import Profesors from "../components/profesores/profesors";
 import { AuthContextProvider } from '../components/context/AuthContext'
-import '../components/globals.css'
+import '../app/globals.css'
 
 export default function Profesores() {  
  return (

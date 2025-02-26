@@ -20,14 +20,17 @@ function Postulate() {
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [course, setCourse] = useState('');
   const [description, setDescription] = useState('');
+  const [price, setPrice] = useState('');
   const [photo, setPhoto] = useState(null);
+  const [subject, setSubject] = useState('');
+  const [subjects, setSubjects] = useState([]);
   const { user } = UserAuth();
   const [open, setOpen] = useState(false);
   const [redirectUser, setRedirectUser] = useState(false);
   const [message, setMessage] = useState('');
   const [route, setRoute] = useState('');
   const router = useRouter();
-  
+
   const handleClose = () => {
     setOpen(false);
     setRedirectUser(true); 
@@ -46,7 +49,25 @@ function Postulate() {
         setRoute('/');
       }
     });
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    const fetchSubjects = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/subjects');
+        const data = await response.json();
+        if (response.ok) {
+          setSubjects(data.data.split(', '));
+        } else {
+          console.error('Error fetching subjects:', data.message);
+        }
+      } catch (error) {
+        console.error('Error fetching subjects:', error);
+      }
+    };
+
+    fetchSubjects();
+  }, []);
 
   if (redirectUser) {
     router.push(route);
@@ -57,11 +78,12 @@ function Postulate() {
     try {
       const formData = new FormData();
       formData.append("description", description);
-      formData.append("courses", selectedCourses);
+      formData.append("courses", JSON.stringify(selectedCourses));
       formData.append("photo", photo);
       formData.append("contactNumber", phone);
+      formData.append("priceDescription", price);
   
-      const response = await fetch(`http://localhost:3000/tutors/create`, {
+      const response = await fetch(`http://localhost:3000/tutors`, {
         method: 'POST',
         body: formData,
         headers: {
@@ -95,34 +117,27 @@ function Postulate() {
   };
 
   const handleCourseChange = () => {
-    const regex = /^[A-Za-z][A-Za-z][A-Za-z]\d\d\d\d$/i;
-   
-    if (regex.test(course)) {
-      const inList = selectedCourses.includes(
-        course
+    if (course && subject) {
+      const inList = selectedCourses.some(
+        (item) => item.course === course && item.subject === subject
       );
 
       if (!inList) {
         const updatedSelectedCourses = [ ...selectedCourses];
-        updatedSelectedCourses.push(course);
+        updatedSelectedCourses.push({ course, subject });
         setSelectedCourses(updatedSelectedCourses);
       }
     }
     setCourse('');
+    setSubject('');
   };
 
   const handleRemoveProfile = (selectedCourse) => {
-    const newSelectedCourses = [ ...selectedCourses];
-
-    const isSelectedCourse = (courseInList) => courseInList == selectedCourse
-    
-    const courseIndex = newSelectedCourses.findIndex(isSelectedCourse);
-    if (courseIndex !== -1) {
-      newSelectedCourses.splice(courseIndex, 1);
-    }
+    const newSelectedCourses = selectedCourses.filter(
+      (item) => item.course !== selectedCourse.course || item.subject !== selectedCourse.subject
+    );
     setSelectedCourses(newSelectedCourses);
   }
-
 
   return (
     <>
@@ -141,7 +156,7 @@ function Postulate() {
         <div className="min-h-screen bg-gray-100">
           <Header/>  
           <div className="min-h-full flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full space-y-8">
+            <div className="max-w-lg w-full space-y-8">
               <div>
                 <h2 className="mt-6 text-center text-4xl font-extrabold text-gray-900">
                   Postular como profesor particular
@@ -189,22 +204,54 @@ function Postulate() {
                   </div>
                 </div>
 
+                {/* Campo de precio */}
+                <div className="rounded-md shadow-sm -space-y-px">
+                  <div className="mb-4 break-words break-all">
+                    <label htmlFor="price" className="sr-only">
+                      Descripción precio
+                    </label>
+                    <textarea
+                      id="price"
+                      name="price"
+                      value={price}
+                      maxLength={1000}
+                      onChange={(e) => setPrice(e.target.value)}
+                      className="appearance-none rounded-none relative block w-full h-28 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                      placeholder="Descripción del precio"
+                    />
+                  </div>
+                </div>
+
                 {/* Campo de curso */}
                 <div className="flex flex-row justify-between">
-                  <label htmlFor="description" className="sr-only">
+                  <label htmlFor="course" className="sr-only">
                     Curso
                   </label>
                   <input
-                      id="description"
-                      name="description"
+                      id="course"
+                      name="course"
                       type="text"
                       pattern="^[A-Za-z][A-Za-z][A-Za-z]\d\d\d\d$"
                       title="IIC2143"
                       value={course}
-                      onChange={(e) => setCourse(e.target.value.toUpperCase())}
+                      onChange={(e) => setCourse(e.target.value)}
                       className="appearance-none rounded-none relative block w-3/4 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                      placeholder="Sigla de curso que dicta (ej: IIC2413)"
+                      placeholder="Nombre curso (ej. Calculo I)"
                     />
+                  <select
+                    id="subject"
+                    name="subject"
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
+                    className="appearance-none rounded-none relative block w-3/4 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  >
+                    <option value="" disabled>Selecciona un área</option>
+                    {subjects.map((subject, index) => (
+                      <option key={index} value={subject}>
+                        {subject}
+                      </option>
+                    ))}
+                  </select>
                   <div>
                     <button
                       type="button"
@@ -217,17 +264,17 @@ function Postulate() {
                 </div>
 
                 <div className="item-list">
-                  {Object.entries(selectedCourses).map(
-                    ([courseId, listCourse]) =>
+                  {selectedCourses.map(
+                    ({ course, subject }, index) =>
                       (
-                        <div className="item-container" key={courseId}>
+                        <div className="item-container" key={index}>
                           <div className="item-name">
                             <div className="flex w-full ring-1 ring-inset rounded-md border-1 px-3.5 py-1 my-1 text-gray-900 shadow-sm ring-gray-300">
-                              <span>{listCourse}</span>
+                              <span>{course} - {subject}</span>
                               <div className="flex-grow"> </div>
                               <div
                                   className="flex-col items-center justify-between hover:bg-red-100"
-                                  onClick={() => handleRemoveProfile(listCourse)}
+                                  onClick={() => handleRemoveProfile({ course, subject })}
                               >
                                   <XMarkIcon className="h-6 w-6 text-red-500" aria-hidden="true" />
                               </div>

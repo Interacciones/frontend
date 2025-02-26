@@ -5,7 +5,7 @@ import Grid from './Grid';
 
 
 export default function Content({ teachers }) {
-    const [filter, setFilter] = useState({ nombre: '', curso: '' });
+    const [filter, setFilter] = useState({ nombre: '', curso: '', area: '' });
 
 
     return (
