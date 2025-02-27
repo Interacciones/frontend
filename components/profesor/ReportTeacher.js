@@ -14,14 +14,15 @@ function ReportTeacher({ onClose, teacher }) {
         event.preventDefault();
         onClose();
         try {
-            const response = await fetch(`${"http://localhost:3000"}/reports/create/${teacher.id}`, {
+            const response = await fetch(`${"http://localhost:3000"}/reports/tutor`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     'Authorization': `Bearer ${user.stsTokenManager.accessToken}`
                 },
                 body: JSON.stringify({
-                    content: reason,
+                    tutorId: teacher.id,
+                    description: reason,
                 }),
             });
             if (response.ok) {
