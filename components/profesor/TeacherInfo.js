@@ -55,7 +55,7 @@ export default function TeacherInfo({ teacher }) {
                         >
                             <circle cx="10" cy="10" r="8" />
                             <line x1="10" y1="5.5" x2="10" y2="11" />
-                            <circle cx="10" y="13.5" r=".2" />
+                            <circle cx="10" cy="13.5" r=".2" />
                         </svg>
                     </button>
                 </div>
@@ -76,13 +76,25 @@ export default function TeacherInfo({ teacher }) {
                 <div className='flex flex-wrap text-center justify-center sm:justify-start'>
                     <p className='text-lg font-bold w-full text-left mb-1'>Cursos:</p>
                     {teacher.courses.map((ramo) => {
-                        return <p key={ramo} className='bg-yellow-400 text-base my-0.5 w-fit mr-1 px-1 rounded-md text-black font-bold'>{ramo}</p>
+                        return (
+                            <Link key={ramo} href={`/profesores?curso=${ramo}`}>
+                                <p className='bg-yellow-400 text-base my-0.5 w-fit mr-1 px-1 rounded-md text-black font-bold cursor-pointer'>
+                                    {ramo}
+                                </p>
+                            </Link>
+                        );
                     })}
                 </div>
                 <div className='flex flex-wrap text-center justify-center sm:justify-start mt-1'>
                     <p className='text-lg font-bold w-full text-left mb-1'>Áreas:</p>
                     {teacher.subjects.map((subject) => {
-                        return <p key={subject} className='bg-yellow-400 text-base my-0.5 w-fit mr-1 px-1 rounded-md text-black font-bold'>{subject}</p>
+                        return (
+                            <Link key={subject} href={`/profesores?area=${subject}`}>
+                                <p className='bg-yellow-400 text-base my-0.5 w-fit mr-1 px-1 rounded-md text-black font-bold cursor-pointer'>
+                                    {subject}
+                                </p>
+                            </Link>
+                        );
                     })}
                 </div>
                 <div className='my-2'>

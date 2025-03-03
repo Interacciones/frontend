@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Filter from './Filter';
@@ -10,6 +11,7 @@ function Profesores() {
   const [quantity, setQuantity] = useState(15);
   const [page, setPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
+  const router = useRouter();
 
   useEffect(() => {
     const getTeachers = async () => {
@@ -51,6 +53,11 @@ function Profesores() {
     }
     getTeachers();
   }, [quantity, page, filter]);
+
+  useEffect(() => {
+    const { nombre, curso, area } = router.query;
+    setFilter({ nombre: nombre || '', curso: curso || '', area: area || '' });
+  }, [router.query]);
 
   const totalPages = Math.ceil(totalCount / quantity);
 
