@@ -55,7 +55,7 @@ export default function TeacherInfo({ teacher }) {
                         >
                             <circle cx="10" cy="10" r="8" />
                             <line x1="10" y1="5.5" x2="10" y2="11" />
-                            <circle cx="10" cy="13.5" r=".2" />
+                            <circle cx="10" y="13.5" r=".2" />
                         </svg>
                     </button>
                 </div>
@@ -72,14 +72,26 @@ export default function TeacherInfo({ teacher }) {
                     <p className="text-yellow-400 my-1 lg:w-full">{teacher.contactNumber}</p>
                 </div>
             </div>
-            <div className='w-full mt-5 sm:w-full sm:min-h-[65%] lg:w-[70%] lg:my-5 lg:mr-4'>
+            <div className='w-full mt-2 sm:w-full sm:min-h-[65%] lg:w-[70%] lg:my-2 lg:mr-4'>
                 <div className='flex flex-wrap text-center justify-center sm:justify-start'>
+                    <p className='text-lg font-bold w-full text-left mb-1'>Cursos:</p>
                     {teacher.courses.map((ramo) => {
-                        return <p key={ramo} className='bg-yellow-400 text-xl my-1 w-fit mr-4 px-2 rounded-md text-black font-bold'>{ramo}</p>
+                        return <p key={ramo} className='bg-yellow-400 text-base my-0.5 w-fit mr-1 px-1 rounded-md text-black font-bold'>{ramo}</p>
                     })}
                 </div>
-                <div className='my-4'>
+                <div className='flex flex-wrap text-center justify-center sm:justify-start mt-1'>
+                    <p className='text-lg font-bold w-full text-left mb-1'>Áreas:</p>
+                    {teacher.subjects.map((subject) => {
+                        return <p key={subject} className='bg-yellow-400 text-base my-0.5 w-fit mr-1 px-1 rounded-md text-black font-bold'>{subject}</p>
+                    })}
+                </div>
+                <div className='my-2'>
+                <p className='text-lg font-bold w-full text-left mb-1'>Descripción:</p>
                     {renderDescription(teacher.description)}
+                </div>
+                <div className='my-2'>
+                <p className='text-lg font-bold w-full text-left mb-1'>Precios:</p>
+                    {renderDescription(teacher.priceDescription)}
                 </div>
             </div>
         </div>
