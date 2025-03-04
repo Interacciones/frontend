@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { UserAuth } from '../context/AuthContext';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -11,6 +11,13 @@ function ReportTeacher({ onClose, teacher }) {
     const { user } = UserAuth();
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState('');
+    const [isVerified, setIsVerified] = useState(false);
+
+    useEffect(() => {
+        if (user) {
+            setIsVerified(user.emailVerified);
+        }
+    }, [user]);
 
     const handleChange = (event) => {
         setReason(event.target.value);
@@ -47,6 +54,26 @@ function ReportTeacher({ onClose, teacher }) {
         setOpen(false);
         onClose();
     };
+
+    if (user && !isVerified) {
+        return (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-75">
+                <div className="bg-white w-[95%] md:w-3/4 lg:w-[60%] rounded-md p-4 shadow-lg mx-auto text-center">
+                    <p className="text-black text-lg font-bold mb-2">
+                        Para poder reportar a los distintos profesores, necesitas verificar tu usuario
+                    </p>
+                    <div className="flex justify-center mt-4">
+                        <button
+                            className="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded-md"
+                            onClick={onClose}
+                        >
+                            Cerrar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-75">
