@@ -1,12 +1,12 @@
 "use client";
-import ProfilePage from "../components/perfil/profile";
+import Contact from "../components/contacto/contact";
 import { AuthContextProvider } from '../components/context/AuthContext'
 import '../app/globals.css'
 
-export default function Profile() {  
+export default function Contacto() {  
  return (
     <AuthContextProvider>
-        <ProfilePage/>
+        <Contact/>
     </AuthContextProvider>
 )
 }

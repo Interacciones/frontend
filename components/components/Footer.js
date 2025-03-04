@@ -10,7 +10,7 @@ const Footer = () => {
                         <div className="flex flex-col items-center w-1/4">
                             <a href="https://buscacursos.uc.cl/" title="Buscador de Cursos UC" target="_blank">
                                 <div className="inline-flex items-center">
-                                    <img className="h-12 w-auto" src="./favicon.png" alt="Centro de Alumnos de Ingeniería"></img>
+                                    <img className="h-12 w-auto" src="/favicon.png" alt="Buscador de Cursos UC"></img>
                                     <span className="m-4 text-sm">Buscador de Cursos UC</span>
                                 </div>
                             </a>
@@ -26,7 +26,7 @@ const Footer = () => {
                         <div className="flex flex-col items-center w-1/4">
                             <a href="https://www.ing.uc.cl/" title="Ingeniería UC" target="_blank">
                                 <div className="inline-flex items-center">
-                                    <img className="h-12 w-auto" src="./icon.ico" alt="Ingeniería UC"></img>
+                                    <img className="h-12 w-auto" src="/icon.ico" alt="Ingeniería UC"></img>
                                     <span className="m-4 text-sm">Ingeniería UC</span>
                                 </div>
                             </a>
@@ -34,7 +34,7 @@ const Footer = () => {
                         <div className="flex flex-col items-center w-1/4">
                             <a href="https://mallastest.ing.uc.cl/" title="Nuevo Planner" target="_blank">
                                 <div className="inline-flex items-center">
-                                    <img className="h-12 w-auto" src="./logo.png" alt="Nuevo Planner"></img>
+                                    <img className="h-12 w-auto" src="/logo.png" alt="Nuevo Planner"></img>
                                     <span className="m-4 text-sm">Nuevo Planner</span>
                                 </div>
                             </a>

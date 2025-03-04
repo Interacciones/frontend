@@ -1,8 +1,13 @@
 "use client";
-import React, {  useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { UserAuth } from '../context/AuthContext';
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import Button from '@mui/material/Button';
 
 function Star({ filled, onClick }) {
     return (
@@ -24,19 +29,23 @@ function Star({ filled, onClick }) {
     );
 }
 
-export default function CommentForm({tutorId, email}) {
+export default function CommentForm({ tutorId, email }) {
     const { user } = UserAuth();
     const [commentText, setCommentText] = useState("");
     const [rating, setRating] = useState(0);
     const [isDisabled, setIsDisabled] = useState(true);
     const [belongsToUser, setBelongsToUser] = useState(false);
-    
+    const [isVerified, setIsVerified] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [message, setMessage] = useState('');
+
     useEffect(() => {
-      onAuthStateChanged(auth, (currentUser) => {
-        if (!currentUser) return;
-        setBelongsToUser(currentUser.email === email);
-      });
-    }, [])
+        onAuthStateChanged(auth, (currentUser) => {
+            if (!currentUser) return;
+            setBelongsToUser(currentUser.email === email);
+            setIsVerified(currentUser.emailVerified);
+        });
+    }, [email]);
 
     const handleStarClick = (starIndex) => {
         if (starIndex === rating) {
@@ -62,13 +71,13 @@ export default function CommentForm({tutorId, email}) {
             console.error("La calificación no puede ser 0");
             return;
         }
-      
+
         try {
             const response = await fetch(`${"http://localhost:3000"}/reviews`, {
                 method: "POST",
                 headers: {
                     'Authorization': `Bearer ${user.stsTokenManager.accessToken}`,
-                    'Content-Type': 'application/json', 
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     "content": commentText,
@@ -77,10 +86,12 @@ export default function CommentForm({tutorId, email}) {
                 }),
             });
             if (response.ok) {
-                if (response.status === 201) {
+                if (response.status === 200) {
                     setCommentText("");
                     setRating(0);
                     setIsDisabled(true);
+                    setMessage('La reseña se ha enviado con éxito');
+                    setOpen(true);
                 }
             } else {
                 console.error("Error al enviar el comentario");
@@ -99,6 +110,11 @@ export default function CommentForm({tutorId, email}) {
         }
     };
 
+    const handleClose = () => {
+        setOpen(false);
+        window.location.reload();
+    };
+
     const stars = [];
     for (let i = 1; i <= 5; i++) {
         stars.push(
@@ -110,30 +126,48 @@ export default function CommentForm({tutorId, email}) {
         );
     }
 
-    if (user && !belongsToUser) {
+    if (user && !belongsToUser && isVerified) {
         return (
-        <div className="px-4">
-            <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                    <div className="ml-2">
-                        <p className="text-lg font-semibold text-gray-800">
-                        Deja un comentario:
-                        </p>
-                        <div className="flex mt-2">
-                            {stars}
+            <div className="px-4">
+                <Dialog open={open} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            {message}
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose}>Cerrar</Button>
+                    </DialogActions>
+                </Dialog>
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                        <div className="ml-2">
+                            <p className="text-lg font-semibold text-gray-800">
+                                Deja un comentario:
+                            </p>
+                            <div className="flex mt-2">
+                                {stars}
+                            </div>
                         </div>
                     </div>
                 </div>
+                <div className="mt-4">
+                    <textarea className="w-full h-24 px-3 py-2 text-gray-700 border rounded-lg focus:outline-none" placeholder="Escribe tu comentario..." value={commentText} onChange={handleInputChange}></textarea>
+                </div>
+                <div className="mt-3">
+                    <button className="px-3.5 py-2.5 text-sm font-semibold rounded-lg justify-center bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-600 transition-all disabled:bg-yellow-600 disabled:hover:bg-yellow-600 disabled:text-gray-300" type="submit" disabled={isDisabled} onClick={handleSubmit}>
+                        Enviar
+                    </button>
+                </div>
             </div>
-            <div className="mt-4">
-                <textarea className="w-full h-24 px-3 py-2 text-gray-700 border rounded-lg focus:outline-none" placeholder="Escribe tu comentario..." value={commentText} onChange={handleInputChange}></textarea>
+        )
+    } else if (user && !isVerified) {
+        return (
+            <div className="px-4">
+                <p className="text-lg font-semibold text-gray-800">
+                    Verifica tu correo electrónico para dejar un comentario
+                </p>
             </div>
-            <div className="mt-3">
-                <button className="px-3.5 py-2.5 text-sm font-semibold rounded-lg justify-center bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-600 transition-all disabled:bg-yellow-600 disabled:hover:bg-yellow-600 disabled:text-gray-300" type="submit" disabled={isDisabled} onClick={handleSubmit}>
-                    Enviar
-                </button>
-            </div>
-        </div>
         )
     } else if (belongsToUser) {
         return (<></>)

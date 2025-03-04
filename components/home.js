@@ -13,7 +13,7 @@ export default function Page() {
               <div className="mx-auto max-w-2xl py-5">
                   <div className="text-center">
                       <h1 className="mt-24 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-                          Bienvenido a Interacciones UC
+                          Bienvenido a Interacciones
                       </h1>
                       <div className="mt-10 flex items-center justify-center gap-x-6">
                           <Link
