@@ -49,9 +49,9 @@ export default function CommentForm({ tutorId, email }) {
 
     const handleStarClick = (starIndex) => {
         if (starIndex === rating) {
-            setRating(0); // Si se hace clic en la misma estrella, resetear la calificación
+            setRating(0);
         } else {
-            setRating(starIndex); // Establecer la calificación al índice de la estrella clicada
+            setRating(starIndex);
         }
         if (commentText.length === 0 || starIndex === rating) {
             setIsDisabled(true);
@@ -93,6 +93,9 @@ export default function CommentForm({ tutorId, email }) {
                     setMessage('La reseña se ha enviado con éxito');
                     setOpen(true);
                 }
+            } else if (response.status === 429) {
+                setMessage('Solo se puede comentar una vez para un tutor cada 2 meses');
+                setOpen(true);
             } else {
                 console.error("Error al enviar el comentario");
             }
@@ -120,7 +123,7 @@ export default function CommentForm({ tutorId, email }) {
         stars.push(
             <Star
                 key={i}
-                filled={i <= rating} // Rellenar estrellas según la calificación
+                filled={i <= rating}
                 onClick={() => handleStarClick(i)}
             />
         );

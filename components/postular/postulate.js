@@ -29,6 +29,9 @@ function Postulate() {
   const [redirectUser, setRedirectUser] = useState(false);
   const [message, setMessage] = useState('');
   const [route, setRoute] = useState('');
+  const [descriptionCharCount, setDescriptionCharCount] = useState(0);
+  const [priceCharCount, setPriceCharCount] = useState(0);
+  const maxCharCount = 1000;
   const router = useRouter();
 
   const handleClose = () => {
@@ -139,6 +142,22 @@ function Postulate() {
     setSelectedCourses(newSelectedCourses);
   }
 
+  const handleDescriptionChange = (e) => {
+    const value = e.target.value;
+    if (value.length <= maxCharCount) {
+      setDescription(value);
+      setDescriptionCharCount(value.length);
+    }
+  };
+
+  const handlePriceChange = (e) => {
+    const value = e.target.value;
+    if (value.length <= maxCharCount) {
+      setPrice(value);
+      setPriceCharCount(value.length);
+    }
+  };
+
   return (
     <>
       <Dialog open={open} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description" >
@@ -188,7 +207,7 @@ function Postulate() {
 
                 {/* Campo de descripcion */}
                 <div className="rounded-md shadow-sm -space-y-px">
-                  <div className="mb-4 break-words break-all">
+                  <div className="mb-4 relative">
                     <label htmlFor="description" className="sr-only">
                       Descripción
                     </label>
@@ -196,17 +215,20 @@ function Postulate() {
                       id="description"
                       name="description"
                       value={description}
-                      maxLength={1000}
-                      onChange={(e) => setDescription(e.target.value)}
+                      maxLength={maxCharCount}
+                      onChange={handleDescriptionChange}
                       className="appearance-none rounded-none relative block w-full h-28 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                       placeholder="Descripción"
                     />
+                    <div className="absolute bottom-2 right-2 text-gray-500 text-sm">
+                      {descriptionCharCount}/{maxCharCount}
+                    </div>
                   </div>
                 </div>
 
                 {/* Campo de precio */}
                 <div className="rounded-md shadow-sm -space-y-px">
-                  <div className="mb-4 break-words break-all">
+                  <div className="mb-4 relative">
                     <label htmlFor="price" className="sr-only">
                       Descripción precio
                     </label>
@@ -214,11 +236,14 @@ function Postulate() {
                       id="price"
                       name="price"
                       value={price}
-                      maxLength={1000}
-                      onChange={(e) => setPrice(e.target.value)}
+                      maxLength={maxCharCount}
+                      onChange={handlePriceChange}
                       className="appearance-none rounded-none relative block w-full h-28 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                       placeholder="Descripción del precio"
                     />
+                    <div className="absolute bottom-2 right-2 text-gray-500 text-sm">
+                      {priceCharCount}/{maxCharCount}
+                    </div>
                   </div>
                 </div>
 
@@ -231,8 +256,7 @@ function Postulate() {
                       id="course"
                       name="course"
                       type="text"
-                      pattern="^[A-Za-z][A-Za-z][A-Za-z]\d\d\d\d$"
-                      title="IIC2143"
+                      maxLength={50}
                       value={course}
                       onChange={(e) => setCourse(e.target.value)}
                       className="appearance-none rounded-none relative block w-3/4 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
