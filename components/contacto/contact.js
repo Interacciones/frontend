@@ -22,6 +22,8 @@ function Contact() {
   const [message, setMessage] = useState('');
   const [isVerified, setIsVerified] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [charCount, setCharCount] = useState(0);
+  const maxCharCount = 500;
   const router = useRouter();
 
   useEffect(() => {
@@ -90,6 +92,14 @@ function Contact() {
       setOpen(true);
     } catch (error) {
       console.log(error.message);
+    }
+  };
+
+  const handleContentChange = (e) => {
+    const value = e.target.value;
+    if (value.length <= maxCharCount) {
+      setContent(value);
+      setCharCount(value.length);
     }
   };
 
@@ -170,7 +180,7 @@ function Contact() {
                 </div>
               </div>
               <div className="rounded-md shadow-sm -space-y-px">
-                <div className="mb-4">
+                <div className="mb-4 relative">
                   <label htmlFor="content" className="sr-only">
                     Mensaje
                   </label>
@@ -179,10 +189,14 @@ function Contact() {
                     name="content"
                     required
                     value={content}
-                    onChange={(e) => setContent(e.target.value)}
+                    onChange={handleContentChange}
                     className="appearance-none rounded-none relative block w-full h-28 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                     placeholder="Mensaje"
+                    maxLength={maxCharCount}
                   />
+                  <div className="absolute bottom-2 right-2 text-gray-500 text-sm">
+                    {charCount}/{maxCharCount}
+                  </div>
                 </div>
               </div>
               <div>
