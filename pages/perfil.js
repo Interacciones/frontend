@@ -1,5 +1,5 @@
 "use client";
-import ProfilePage from "../components/profile/profile";
+import ProfilePage from "../components/perfil/profile";
 import { AuthContextProvider } from '../components/context/AuthContext'
 import '../app/globals.css'
 
