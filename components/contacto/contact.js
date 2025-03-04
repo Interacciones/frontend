@@ -20,32 +20,43 @@ function Contact() {
   const { user } = UserAuth();
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
+  const [isVerified, setIsVerified] = useState(false);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
     if (user) {
-      const fetchUserProfile = async () => {
-        try {
-          const response = await fetch(`http://localhost:3000/users-self`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${user.stsTokenManager.accessToken}`
+      setIsVerified(user.emailVerified);
+      if (user.emailVerified) {
+        const fetchUserProfile = async () => {
+          try {
+            const response = await fetch(`http://localhost:3000/users-self`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${user.stsTokenManager.accessToken}`
+              }
+            });
+            const data = await response.json();
+            if (response.ok) {
+              setName(data.data.name);
+              setLastName(data.data.lastName);
+              setEmail(data.data.email);
+            } else {
+              console.error('Error fetching user profile:', data.message);
             }
-          });
-          const data = await response.json();
-          if (response.ok) {
-            setName(data.data.name);
-            setLastName(data.data.lastName);
-            setEmail(data.data.email);
-          } else {
-            console.error('Error fetching user profile:', data.message);
+          } catch (error) {
+            console.error('Error fetching user profile:', error);
+          } finally {
+            setLoading(false);
           }
-        } catch (error) {
-          console.error('Error fetching user profile:', error);
-        }
-      };
-      fetchUserProfile();
+        };
+        fetchUserProfile();
+      } else {
+        setLoading(false);
+      }
+    } else {
+      setLoading(false);
     }
   }, [user]);
 
@@ -118,7 +129,7 @@ function Contact() {
                     onChange={(e) => setName(e.target.value)}
                     className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                     placeholder="Nombre"
-                    disabled={!!user}
+                    disabled={loading || !!(user && user.emailVerified)}
                   />
                 </div>
               </div>
@@ -136,7 +147,7 @@ function Contact() {
                     onChange={(e) => setLastName(e.target.value)}
                     className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                     placeholder="Apellido"
-                    disabled={!!user}
+                    disabled={loading || !!(user && user.emailVerified)}
                   />
                 </div>
               </div>
@@ -154,7 +165,7 @@ function Contact() {
                     onChange={(e) => setEmail(e.target.value)}
                     className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                     placeholder="Correo Electrónico"
-                    disabled={!!user}
+                    disabled={loading || !!(user && user.emailVerified)}
                   />
                 </div>
               </div>
