@@ -12,6 +12,8 @@ function ReportTeacher({ onClose, teacher }) {
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState('');
     const [isVerified, setIsVerified] = useState(false);
+    const [charCount, setCharCount] = useState(0);
+    const maxCharCount = 1000;
 
     useEffect(() => {
         if (user) {
@@ -20,7 +22,11 @@ function ReportTeacher({ onClose, teacher }) {
     }, [user]);
 
     const handleChange = (event) => {
-        setReason(event.target.value);
+        const value = event.target.value;
+        if (value.length <= maxCharCount) {
+            setReason(value);
+            setCharCount(value.length);
+        }
     };
 
     const handleSubmit = async (event) => {
@@ -87,8 +93,7 @@ function ReportTeacher({ onClose, teacher }) {
                     <Button onClick={handleClose}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
-            <div className="bg-white w-[95%] md:w-3/4 lg:w-[60%] rounded-md p-4 shadow-lg">
-                <h2 className="text-xl font-semibold mb-4">Reportar Profesor</h2>
+            <div className="bg-white w-[95%] md:w-3/4 lg:w-[60%] rounded-md p-4 shadow-lg mx-auto text-center relative">
                 <p className="text-black text-lg font-bold mb-2">
                     ¿Por qué estás reportando a este profesor?
                 </p>
@@ -97,8 +102,12 @@ function ReportTeacher({ onClose, teacher }) {
                     placeholder="Escribe la razón del reporte..."
                     value={reason}
                     onChange={handleChange}
+                    maxLength={maxCharCount}
                 />
-                <div className="flex justify-end mt-4">
+                <div className="absolute bottom-2 right-2 text-gray-500 text-sm">
+                    {charCount}/{maxCharCount}
+                </div>
+                <div className="flex justify-center mt-4">
                     <button
                         className="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded-md mr-2"
                         onClick={onClose}
