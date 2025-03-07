@@ -28,7 +28,7 @@ export default function Comment({ comment }) {
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
     const menuRef = useRef(null);
     const { user } = UserAuth();
-    const publisher = `${comment.User.name} ${comment.User.lastName}`
+    const publisher = `${comment.name || ''} ${comment.lastName || ''}`;
 
     const renderStars = (rating) => {
         const stars = [];

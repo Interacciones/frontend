@@ -1,12 +1,12 @@
 "use client";
-import Update from "../components/actualizar/update";
+import Contact from "../components/contacto/contact";
 import { AuthContextProvider } from '../components/context/AuthContext'
 import '../app/globals.css'
 
-export default function Actualizar() {  
+export default function Contacto() {  
  return (
     <AuthContextProvider>
-        <Update/>
+        <Contact/>
     </AuthContextProvider>
 )
 }

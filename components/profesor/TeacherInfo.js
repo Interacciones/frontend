@@ -11,20 +11,18 @@ function renderDescription(description) {
     return lines.map((line, index) => <p className='text-justify' key={index}>{line}<br/></p>);
 }
 
-
-export default function TeacherInfo({ teacher })  {
+export default function TeacherInfo({ teacher }) {
     const fullName = `${teacher.name} ${teacher.lastName}`;
     const [isReportTeacherOpen, setIsReportTeacherOpen] = useState(false);
     const { user } = UserAuth();
     const [belongsToUser, setBelongsToUser] = useState(false);
-    
-    useEffect(() => {
-      onAuthStateChanged(auth, (currentUser) => {
-        if (!currentUser) return;
-        setBelongsToUser(currentUser.email === teacher.contactMail);
-      });
-    }, [])
 
+    useEffect(() => {
+        onAuthStateChanged(auth, (currentUser) => {
+            if (!currentUser) return;
+            setBelongsToUser(currentUser.email === teacher.email);
+        });
+    }, [teacher.email]);
 
     return (
         <div className='bg-indigo-800 text-white rounded-3xl m-6 p-5 w-full sm:m-9 sm:p-7 lg:m-12 lg:p-8 flex flex-wrap justify-between relative'>
@@ -70,20 +68,44 @@ export default function TeacherInfo({ teacher })  {
                     <h1 className='text-3xl font-bold lg:text-2xl xl:text-3xl mt-4'>{fullName}</h1>
                 </div>
                 <div className='flex mt-5 drop-shadow-md flex-wrap px-2 h-fit justify-between w-full mx-auto sm:justify-center sm:my-7 sm:w-[30%] lg:w-full text-center'>
-                    <p className='text-yellow-400 my-1 lg:w-full'>{teacher.contactMail}</p>
+                    <p className='text-yellow-400 my-1 lg:w-full'>{teacher.email}</p>
                     <p className="text-yellow-400 my-1 lg:w-full">{teacher.contactNumber}</p>
                 </div>
             </div>
-            <div className='w-full mt-5 sm:w-full sm:min-h-[65%] lg:w-[70%] lg:my-5 lg:mr-4'>
+            <div className='w-full mt-2 sm:w-full sm:min-h-[65%] lg:w-[70%] lg:my-2 lg:mr-4'>
                 <div className='flex flex-wrap text-center justify-center sm:justify-start'>
-                    {teacher.coursesInfo.map((ramo) => {
-                        return <p key={ramo} className='bg-yellow-400 text-xl my-1 w-fit mr-4 px-2 rounded-md text-black font-bold'>{ramo}</p>
+                    <p className='text-lg font-bold w-full text-left mb-1'>Cursos:</p>
+                    {teacher.courses.map((ramo) => {
+                        return (
+                            <Link key={ramo} href={`/profesores?curso=${ramo}`}>
+                                <p className='bg-yellow-400 text-base my-0.5 w-fit mr-1 px-1 rounded-md text-black font-bold cursor-pointer'>
+                                    {ramo}
+                                </p>
+                            </Link>
+                        );
                     })}
                 </div>
-                <div className='my-4'>
+                <div className='flex flex-wrap text-center justify-center sm:justify-start mt-1'>
+                    <p className='text-lg font-bold w-full text-left mb-1'>Áreas:</p>
+                    {teacher.subjects.map((subject) => {
+                        return (
+                            <Link key={subject} href={`/profesores?area=${subject}`}>
+                                <p className='bg-yellow-400 text-base my-0.5 w-fit mr-1 px-1 rounded-md text-black font-bold cursor-pointer'>
+                                    {subject}
+                                </p>
+                            </Link>
+                        );
+                    })}
+                </div>
+                <div className='my-2'>
+                <p className='text-lg font-bold w-full text-left mb-1'>Descripción:</p>
                     {renderDescription(teacher.description)}
+                </div>
+                <div className='my-2'>
+                <p className='text-lg font-bold w-full text-left mb-1'>Precios:</p>
+                    {renderDescription(teacher.priceDescription)}
                 </div>
             </div>
         </div>
-    )
+    );
 }

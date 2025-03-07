@@ -1,44 +1,99 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { UserAuth } from '../context/AuthContext';
-
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import Button from '@mui/material/Button';
 
 function ReportTeacher({ onClose, teacher }) {
     const [reason, setReason] = useState('');
     const { user } = UserAuth();
-  
+    const [open, setOpen] = useState(false);
+    const [message, setMessage] = useState('');
+    const [isVerified, setIsVerified] = useState(false);
+    const [charCount, setCharCount] = useState(0);
+    const maxCharCount = 1000;
+
+    useEffect(() => {
+        if (user) {
+            setIsVerified(user.emailVerified);
+        }
+    }, [user]);
+
     const handleChange = (event) => {
-        setReason(event.target.value);
+        const value = event.target.value;
+        if (value.length <= maxCharCount) {
+            setReason(value);
+            setCharCount(value.length);
+        }
     };
-  
+
     const handleSubmit = async (event) => {
         event.preventDefault();
-        onClose();
         try {
-            const response = await fetch(`${"http://localhost:3000"}/reports/create/${teacher.id}`, {
+            const response = await fetch(`${"http://localhost:3000"}/reports/tutor`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     'Authorization': `Bearer ${user.stsTokenManager.accessToken}`
                 },
                 body: JSON.stringify({
-                    content: reason,
+                    tutorId: teacher.id,
+                    description: reason,
                 }),
             });
             if (response.ok) {
-                // Realizar acciones
+                if (response.status === 201) {
+                    setMessage('Reporte enviado con éxito');
+                    setOpen(true);
+                }
             } else {
-                console.error("Error al enviar el comentario");
+                console.error("Error al enviar el reporte");
             }
-
         } catch (error) {
             console.error("Error en la solicitud:", error);
         }
     };
-  
+
+    const handleClose = () => {
+        setOpen(false);
+        onClose();
+    };
+
+    if (user && !isVerified) {
+        return (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-75">
+                <div className="bg-white w-[95%] md:w-3/4 lg:w-[60%] rounded-md p-4 shadow-lg mx-auto text-center">
+                    <p className="text-black text-lg font-bold mb-2">
+                        Para poder reportar a los distintos profesores, necesitas verificar tu usuario
+                    </p>
+                    <div className="flex justify-center mt-4">
+                        <button
+                            className="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded-md"
+                            onClick={onClose}
+                        >
+                            Cerrar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-75">
-            <div className="bg-white w-[95%] md:w-3/4 lg:w-[60%] rounded-md p-4 shadow-lg">
-                <h2 className="text-xl font-semibold mb-4">Reportar Profesor</h2>
+            <Dialog open={open} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        {message}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Cerrar</Button>
+                </DialogActions>
+            </Dialog>
+            <div className="bg-white w-[95%] md:w-3/4 lg:w-[60%] rounded-md p-4 shadow-lg mx-auto text-center relative">
                 <p className="text-black text-lg font-bold mb-2">
                     ¿Por qué estás reportando a este profesor?
                 </p>
@@ -47,8 +102,12 @@ function ReportTeacher({ onClose, teacher }) {
                     placeholder="Escribe la razón del reporte..."
                     value={reason}
                     onChange={handleChange}
+                    maxLength={maxCharCount}
                 />
-                <div className="flex justify-end mt-4">
+                <div className="absolute bottom-2 right-2 text-gray-500 text-sm">
+                    {charCount}/{maxCharCount}
+                </div>
+                <div className="flex justify-center mt-4">
                     <button
                         className="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded-md mr-2"
                         onClick={onClose}
@@ -66,5 +125,5 @@ function ReportTeacher({ onClose, teacher }) {
         </div>
     );
 }
-  
-  export default ReportTeacher;
+
+export default ReportTeacher;

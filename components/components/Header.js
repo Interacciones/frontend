@@ -13,12 +13,12 @@ export default function Header() {
     const { user, logout } = UserAuth();
 
     return (
-        <header className="bg-indigo-800  border border-blue-600">
-            <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8 " aria-label="Global">
+        <header className="bg-indigo-800 border border-blue-600">
+            <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
                 <div className="flex lg:flex-1">
-                    <Link href="/" className="-m-1.5 p-1.5">
-                        <span className="sr-only">UC</span>
-                        <img className="h-15 w-auto" src="/uc.png" alt=""/>
+                    <Link href="/" className="p-0">
+                        <span className="sr-only">INTERACCIONES</span>
+                        <span className="text-white text-4xl font-bold hover:text-gray-500">INTERACCIONES</span>
                     </Link>
                 </div>
                 <div className="flex lg:hidden">
@@ -31,13 +31,18 @@ export default function Header() {
                         <Bars3Icon className="h-6 w-6 text-white" aria-hidden="true" />
                     </button>
                 </div>
-                <Popover.Group className="hidden lg:flex lg:gap-x-12" >
+                <Popover.Group className="hidden lg:flex lg:gap-x-12">
                     <Link href="/profesores" className="text-sm font-semibold leading-6 text-white hover:text-gray-500">
                         Buscar Profesor Particular
                     </Link>
-                    {/* <Link href="#" className="text-sm font-semibold leading-6 text-white hover:text-gray-500">
-                        Foros de discusión
-                    </Link> */}
+                    <Link href="/contacto" className="text-sm font-semibold leading-6 text-white hover:text-gray-500">
+                        Contacto
+                    </Link>
+                    {user && (
+                        <Link href="/perfil" className="text-sm font-semibold leading-6 text-white hover:text-gray-500">
+                            Perfil
+                        </Link>
+                    )}
                 </Popover.Group>
                 <div className="hidden lg:flex lg:flex-1 lg:justify-end">
                     {user ? (
@@ -59,13 +64,9 @@ export default function Header() {
                 <div className="fixed inset-0 z-10" />
                 <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
                     <div className="flex items-center justify-between">
-                        <Link href="#" className="-m-1.5 p-1.5">
-                            <span className="sr-only">UC</span>
-                            <img
-                                src="./icon.ico"
-                                alt=""
-                                className="h-10 w-auto"
-                            />
+                        <Link href="/" className="p-0">
+                            <span className="sr-only">INTERACCIONES</span>
+                            <span className="text-gray-900 text-4xl font-bold hover:text-gray-500">INTERACCIONES</span>
                         </Link>
                         <button
                             type="button"
@@ -82,9 +83,14 @@ export default function Header() {
                                 <Link href="/profesores" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
                                     Buscar Profesor Particular
                                 </Link>
-                                {/* <Link href="#" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
-                                    Foros de discusión
-                                </Link> */}
+                                <Link href="/contacto" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                                    Contacto
+                                </Link>
+                                {user && (
+                                    <Link href="/perfil" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                                        Perfil
+                                    </Link>
+                                )}
                             </div>
                             <div className="py-6">
                                 {user ? (

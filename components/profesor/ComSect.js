@@ -3,8 +3,9 @@ import Comment from "./Comment";
 import CommentForm from "./ComForm";
 import Resume from "./ComResume";
 
+export default function CommentSection({ id, average, comments, email, reviewAmount, oneStarReviews, twoStarReviews, threeStarReviews, fourStarReviews, fiveStarReviews }) {
+    const sortedComments = comments.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-export default function CommentSection({ id, average, comments, email }) {
     return (
         <div className="w-full">
             <CommentForm tutorId={id} email={email} />
@@ -15,16 +16,16 @@ export default function CommentSection({ id, average, comments, email }) {
                     </div>
                 ) : (
                     <div>
-                        <Resume reviews={comments} average={average} />
-                        {comments?.length === 0 ? (
+                        <Resume average={average} reviewAmount={reviewAmount} oneStarReviews={oneStarReviews} twoStarReviews={twoStarReviews} threeStarReviews={threeStarReviews} fourStarReviews={fourStarReviews} fiveStarReviews={fiveStarReviews} />
+                        {sortedComments.length === 0 ? (
                             <div>No hay comentarios</div>
-                            ) : (
+                        ) : (
                             <div>
-                                {comments.map((comment) => (
-                                <Comment key={comment.id} comment={comment} />
+                                {sortedComments.map((comment) => (
+                                    <Comment key={comment.id} comment={comment} />
                                 ))}
                             </div>
-                            )}
+                        )}
                     </div>
                 )}
             </div>

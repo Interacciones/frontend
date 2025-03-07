@@ -1,9 +1,29 @@
 "use client";
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react';
 
 function Filter({ setFilter }) {
   const [nombre, setNombre] = useState('');
   const [curso, setCurso] = useState('');
+  const [area, setArea] = useState('');
+  const [areas, setAreas] = useState([]);
+
+  useEffect(() => {
+    const fetchAreas = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/subjects');
+        const data = await response.json();
+        if (response.ok) {
+          setAreas(data.data.split(', '));
+        } else {
+          console.error('Error fetching areas:', data.message);
+        }
+      } catch (error) {
+        console.error('Error fetching areas:', error);
+      }
+    };
+
+    fetchAreas();
+  }, []);
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
@@ -12,9 +32,8 @@ function Filter({ setFilter }) {
   };
 
   const handleFilter = () => {
-    setFilter({ nombre, curso });
+    setFilter({ nombre, curso, area });
   };
-
 
   return (
     <div className='flex flex-wrap mx-auto w-full justify-center'>
@@ -41,6 +60,21 @@ function Filter({ setFilter }) {
               onKeyDown={handleKeyPress}
               className='w-full bg-indigo-600 focus:outline-none p-3 rounded-b-xl' />
         </div>
+        <div className='flex flex-wrap mx-auto w-full md:w-[35%] text-white my-3 lg:my-7 rounded-xl lg:w-full'>
+            <label htmlFor="Area" className='w-full bg-indigo-800 p-3 rounded-t-xl'>Área de estudio</label>
+            <select
+              name="Area"
+              id="Area"
+              value={area}
+              onChange={(e) => setArea(e.target.value)}
+              className='w-full bg-indigo-600 focus:outline-none p-3 rounded-b-xl'
+            >
+              <option value="">Selecciona un área</option>
+              {areas.map((area, index) => (
+                <option key={index} value={area}>{area}</option>
+              ))}
+            </select>
+        </div>
         <button
           onClick={handleFilter}
           className='font-semibold text-black flex flex-wrap items-center justify-center bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-600 transition-all rounded-md mx-auto w-44 px-3.5 py-2.5 text-sm md:my-auto md:h-16 lg:h-fit'
@@ -52,4 +86,4 @@ function Filter({ setFilter }) {
   )
 }
 
-export default Filter
+export default Filter;

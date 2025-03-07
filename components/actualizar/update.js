@@ -18,9 +18,13 @@ import RouteLoader from '../components/RouteLoader';
 function Actualizar() {
   const [phone, setPhone] = useState('');
   const [selectedCourses, setSelectedCourses] = useState([]);
+  const [selectedSubjects, setSelectedSubjects] = useState([]);
   const [course, setCourse] = useState('');
   const [description, setDescription] = useState('');
+  const [price, setPrice] = useState('');
   const [photo, setPhoto] = useState(null);
+  const [subject, setSubject] = useState('');
+  const [subjects, setSubjects] = useState([]);
   const { user } = UserAuth();
   const [open, setOpen] = useState(false);
   const [redirectUser, setRedirectUser] = useState(false);
@@ -37,7 +41,7 @@ function Actualizar() {
     const fetchProfile = async (currentUser) => {
       try {
         console.log(currentUser)
-        const response = await fetch(`http://localhost:3000/tutors/getOwn`, {
+        const response = await fetch(`http://localhost:3000/tutors-self`, {
           method: 'GET',
           headers: {
             "Content-Type": "application/json",
@@ -45,13 +49,30 @@ function Actualizar() {
           }, 
         });
         const result = await response.json();
-        setPhone(result.contactNumber)
-        setDescription(result.description)
-        setSelectedCourses(result.coursesInfo)
+        setPhone(result.data.contactNumber);
+        setDescription(result.data.description);
+        setPrice(result.data.priceDescription);
+        setSelectedCourses(result.data.courses || []);
+        setSelectedSubjects(result.data.subjects || []);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
+
+    const fetchSubjects = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/subjects');
+        const data = await response.json();
+        if (response.ok) {
+          setSubjects(data.data.split(', '));
+        } else {
+          console.error('Error fetching subjects:', data.message);
+        }
+      } catch (error) {
+        console.error('Error fetching subjects:', error);
+      }
+    };
+
     onAuthStateChanged(auth, (currentUser) => {
       if (!currentUser) {
         setOpen(true);
@@ -63,6 +84,7 @@ function Actualizar() {
         setRoute('/');
       } else {
         fetchProfile(currentUser);
+        fetchSubjects();
       }
     });
   }, [])
@@ -76,22 +98,19 @@ function Actualizar() {
     try {
       const formData = new FormData();
       formData.append("description", description);
-      formData.append("courses", selectedCourses);
+      formData.append("courses", JSON.stringify(selectedCourses));
+      formData.append("subjects", JSON.stringify(selectedSubjects));
       formData.append("photo", photo);
       formData.append("contactNumber", phone);
+      formData.append("priceDescription", price);
 
       if (!photo) {
         formData.append("changedPhoto", false);
       } else {
         formData.append("changedPhoto", true);
       }
-
-      //print the different values of form data
-      for (var value of formData.values()) {
-        console.log(value);
-      }
   
-      const response = await fetch(`http://localhost:3000/tutors/update-tutor`, {
+      const response = await fetch(`http://localhost:3000/own-tutor`, {
         method: 'PATCH',
         body: formData,
         headers: {
@@ -101,7 +120,7 @@ function Actualizar() {
   
       if (!response.ok) throw Error(message);
   
-      setMessage('Postulación enviada');
+      setMessage('Perfil actualizado');
       setRoute('/');
       setOpen(true);
     } catch ({ message }) {
@@ -123,12 +142,8 @@ function Actualizar() {
   };
 
   const handleCourseChange = () => {
-    const regex = /^[A-Za-z][A-Za-z][A-Za-z]\d\d\d\d$/i;
-   
-    if (regex.test(course)) {
-      const inList = selectedCourses.includes(
-        course
-      );
+    if (course) {
+      const inList = selectedCourses.includes(course);
 
       if (!inList) {
         const updatedSelectedCourses = [ ...selectedCourses];
@@ -139,16 +154,31 @@ function Actualizar() {
     setCourse('');
   };
 
-  const handleRemoveProfile = (selectedCourse) => {
-    const newSelectedCourses = [ ...selectedCourses];
+  const handleSubjectChange = () => {
+    if (subject) {
+      const inList = selectedSubjects.includes(subject);
 
-    const isSelectedCourse = (courseInList) => courseInList == selectedCourse
-    
-    const courseIndex = newSelectedCourses.findIndex(isSelectedCourse);
-    if (courseIndex !== -1) {
-      newSelectedCourses.splice(courseIndex, 1);
+      if (!inList) {
+        const updatedSelectedSubjects = [ ...selectedSubjects];
+        updatedSelectedSubjects.push(subject);
+        setSelectedSubjects(updatedSelectedSubjects);
+      }
     }
+    setSubject('');
+  };
+
+  const handleRemoveCourse = (course) => {
+    const newSelectedCourses = selectedCourses.filter(
+      (item) => item !== course
+    );
     setSelectedCourses(newSelectedCourses);
+  }
+
+  const handleRemoveSubject = (subject) => {
+    const newSelectedSubjects = selectedSubjects.filter(
+      (item) => item !== subject
+    );
+    setSelectedSubjects(newSelectedSubjects);
   }
 
 
@@ -216,21 +246,38 @@ function Actualizar() {
                 </div>
               </div>
 
+              {/* Campo de precio */}
+              <div className="rounded-md shadow-sm -space-y-px">
+                <div className="mb-4 break-words break-all">
+                  <label htmlFor="price" className="sr-only">
+                    Descripción precio
+                  </label>
+                  <textarea
+                    id="price"
+                    name="price"
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
+                    className="appearance-none rounded-none relative block w-full h-28 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                    placeholder="Descripción del precio"
+                  />
+                </div>
+              </div>
+
               {/* Campo de curso */}
               <div className="flex flex-row justify-between">
-                <label htmlFor="description" className="sr-only">
+                <label htmlFor="course" className="sr-only">
                   Curso
                 </label>
                 <input
-                    id="description"
-                    name="description"
+                    id="course"
+                    name="course"
                     type="text"
                     pattern="^[A-Za-z][A-Za-z][A-Za-z]\d\d\d\d$"
                     title="IIC2143"
                     value={course}
-                    onChange={(e) => setCourse(e.target.value.toUpperCase())}
+                    onChange={(e) => setCourse(e.target.value)}
                     className="appearance-none rounded-none relative block w-3/4 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                    placeholder="Sigla de curso que dicta (ej: IIC2413)"
+                    placeholder="Nombre curso (ej. Calculo I)"
                   />
                 <div>
                   <button
@@ -243,18 +290,77 @@ function Actualizar() {
                 </div>
               </div>
 
+              <p className="mt-1 text-sm text-gray-800" id="file_input_help">Cursos anteriores</p>
+              <hr className="my-2 border-gray-300" />
+
               <div className="item-list">
-                {Object.entries(selectedCourses).map(
-                  ([courseId, listCourse]) =>
+                {selectedCourses.map(
+                  (course, index) =>
                     (
-                      <div className="item-container" key={courseId}>
+                      <div className="item-container" key={index}>
                         <div className="item-name">
                           <div className="w-full flex ring-1 ring-inset rounded-md border-1 px-3.5 py-1 my-1 text-gray-900 shadow-sm ring-gray-300">
-                            <span>{listCourse}</span>
+                            <span>{course}</span>
                             <div className="flex-grow"> </div>
                             <div
                                 className="flex-col items-center justify-between hover:bg-red-100"
-                                onClick={() => handleRemoveProfile(listCourse)}
+                                onClick={() => handleRemoveCourse(course)}
+                            >
+                                <XMarkIcon className="h-6 w-6 text-red-500" aria-hidden="true" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  )
+                }
+              </div>
+
+              {/* Campo de subject */}
+              <div className="flex flex-row justify-between">
+                <label htmlFor="subject" className="sr-only">
+                  Área
+                </label>
+                <select
+                  id="subject"
+                  name="subject"
+                  value={subject}
+                  onChange={(e) => setSubject(e.target.value)}
+                  className="appearance-none rounded-none relative block w-3/4 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                >
+                  <option value="" disabled>Selecciona un área</option>
+                  {subjects.map((subject, index) => (
+                    <option key={index} value={subject}>
+                      {subject}
+                    </option>
+                  ))}
+                </select>
+                <div>
+                  <button
+                    type="button"
+                    onClick={handleSubjectChange}
+                    className="group relative justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  >
+                    Agregar
+                  </button>
+                </div>
+              </div>
+
+              <p className="mt-1 text-sm text-gray-800" id="file_input_help">Áreas anteriores</p>
+              <hr className="my-2 border-gray-300" />
+
+              <div className="item-list">
+                {selectedSubjects.map(
+                  (subject, index) =>
+                    (
+                      <div className="item-container" key={index}>
+                        <div className="item-name">
+                          <div className="w-full flex ring-1 ring-inset rounded-md border-1 px-3.5 py-1 my-1 text-gray-900 shadow-sm ring-gray-300">
+                            <span>{subject}</span>
+                            <div className="flex-grow"> </div>
+                            <div
+                                className="flex-col items-center justify-between hover:bg-red-100"
+                                onClick={() => handleRemoveSubject(subject)}
                             >
                                 <XMarkIcon className="h-6 w-6 text-red-500" aria-hidden="true" />
                             </div>
@@ -290,7 +396,7 @@ function Actualizar() {
                   type="submit"
                   className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
-                  Postular
+                  Actualizar
                 </button>
               </div>
             </form>
