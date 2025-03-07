@@ -109,11 +109,6 @@ function Actualizar() {
       } else {
         formData.append("changedPhoto", true);
       }
-
-      //print the different values of form data
-      for (var value of formData.values()) {
-        console.log(value);
-      }
   
       const response = await fetch(`http://localhost:3000/own-tutor`, {
         method: 'PATCH',
