@@ -66,7 +66,7 @@ function Profesores() {
       <Header />
       <div className="min-h-screen flex flex-wrap justify-between text-black bg-gray-100 py-4 lg:py-12 px-4 sm:px-6 lg:px-8">
         <div className='w-full mx-auto mb-7 lg:w-[25rem] lg:ml-1 lg:mr-0'>
-          <Filter setFilter={setFilter} setCantidad={setQuantity} />
+          <Filter setFilter={setFilter} />
         </div>
         <Grid teachers={teachers} filter={filter} totalCount={totalCount} cantidad={quantity} pagina={page} setPagina={setPage} />
       </div>
@@ -80,6 +80,19 @@ function Profesores() {
             {index + 1}
           </button>
         ))}
+      </div>
+      <div className='flex justify-center bg-gray-100 py-4'>
+        <select
+          name="Cantidad"
+          id="Cantidad"
+          value={quantity}
+          onChange={(e) => setQuantity(parseInt(e.target.value))}
+          className='bg-gray-200 text-gray-700 px-3 py-1 rounded'
+        >
+          <option value={9}>9</option>
+          <option value={15}>15</option>
+          <option value={21}>21</option>
+        </select>
       </div>
       <Footer />
     </>

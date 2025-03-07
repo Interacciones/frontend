@@ -31,14 +31,14 @@ const Footer = () => {
                                 </div>
                             </a>
                         </div>
-                        <div className="flex flex-col items-center w-1/4 sm:w-auto">
+                        {/* <div className="flex flex-col items-center w-1/4 sm:w-auto">
                             <a href="https://mallastest.ing.uc.cl/" title="Nuevo Planner" target="_blank">
                                 <div className="inline-flex items-center">
                                     <img className="h-12 w-auto" src="/logo.png" alt="Nuevo Planner"></img>
                                     <span className="m-4 text-sm hidden sm:inline-block text-white">Nuevo Planner</span>
                                 </div>
                             </a>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </section>

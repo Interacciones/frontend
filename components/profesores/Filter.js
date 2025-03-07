@@ -1,12 +1,11 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 
-function Filter({ setFilter, setCantidad }) {
+function Filter({ setFilter }) {
   const [nombre, setNombre] = useState('');
   const [curso, setCurso] = useState('');
   const [area, setArea] = useState('');
   const [areas, setAreas] = useState([]);
-  const [cantidad, setCantidadLocal] = useState(15);
 
   useEffect(() => {
     const fetchAreas = async () => {
@@ -34,7 +33,6 @@ function Filter({ setFilter, setCantidad }) {
 
   const handleFilter = () => {
     setFilter({ nombre, curso, area });
-    setCantidad(cantidad);
   };
 
   return (
@@ -75,20 +73,6 @@ function Filter({ setFilter, setCantidad }) {
               {areas.map((area, index) => (
                 <option key={index} value={area}>{area}</option>
               ))}
-            </select>
-        </div>
-        <div className='flex flex-wrap mx-auto w-full md:w-[35%] text-white my-3 lg:my-7 rounded-xl lg:w-full'>
-            <label htmlFor="Cantidad" className='w-full bg-indigo-800 p-3 rounded-t-xl'>Cantidad de tutores por página</label>
-            <select
-              name="Cantidad"
-              id="Cantidad"
-              value={cantidad}
-              onChange={(e) => setCantidadLocal(parseInt(e.target.value))}
-              className='w-full bg-indigo-600 focus:outline-none p-3 rounded-b-xl'
-            >
-              <option value={9}>9</option>
-              <option value={15}>15</option>
-              <option value={21}>21</option>
             </select>
         </div>
         <button
