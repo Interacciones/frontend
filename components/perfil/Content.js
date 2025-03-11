@@ -22,7 +22,7 @@ export default function TeacherInfo({ user }) {
         const checkTutorProfile = async () => {
             if (!currentUser) return;
             try {
-                const response = await fetch(`http://localhost:3000/tutors-self`, {
+                const response = await fetch(`https://interaccionesuni.com/tutors-self`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

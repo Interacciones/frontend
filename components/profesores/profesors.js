@@ -24,7 +24,7 @@ function Profesores() {
           area: filter.area,
         }).toString();
 
-        const res = await fetch(`${"http://localhost:3000"}/tutors?${queryParams}`, 
+        const res = await fetch(`${"https://interaccionesuni.com"}/tutors?${queryParams}`, 
           {
             method: 'GET',
             headers: {
