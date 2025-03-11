@@ -10,7 +10,7 @@ function Filter({ setFilter }) {
   useEffect(() => {
     const fetchAreas = async () => {
       try {
-        const response = await fetch('http://localhost:3000/subjects');
+        const response = await fetch('https://interaccionesuni.com/subjects');
         const data = await response.json();
         if (response.ok) {
           setAreas(data.data.split(', '));

@@ -41,7 +41,7 @@ function Actualizar() {
     const fetchProfile = async (currentUser) => {
       try {
         console.log(currentUser)
-        const response = await fetch(`http://localhost:3000/tutors-self`, {
+        const response = await fetch(`https://interaccionesuni.com/tutors-self`, {
           method: 'GET',
           headers: {
             "Content-Type": "application/json",
@@ -61,7 +61,7 @@ function Actualizar() {
 
     const fetchSubjects = async () => {
       try {
-        const response = await fetch('http://localhost:3000/subjects');
+        const response = await fetch('https://interaccionesuni.com/subjects');
         const data = await response.json();
         if (response.ok) {
           setSubjects(data.data.split(', '));
@@ -110,7 +110,7 @@ function Actualizar() {
         formData.append("changedPhoto", true);
       }
   
-      const response = await fetch(`http://localhost:3000/own-tutor`, {
+      const response = await fetch(`https://interaccionesuni.com/own-tutor`, {
         method: 'PATCH',
         body: formData,
         headers: {

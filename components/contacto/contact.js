@@ -30,7 +30,7 @@ function Contact() {
       if (user.emailVerified) {
         const fetchUserProfile = async () => {
           try {
-            const response = await fetch(`http://localhost:3000/users-self`, {
+            const response = await fetch(`https://interaccionesuni.com/users-self`, {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
@@ -68,7 +68,7 @@ function Contact() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:3000/contact`, {
+      const response = await fetch(`https://interaccionesuni.com/contact`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
