@@ -4,37 +4,38 @@ import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Filter from './Filter';
 import Grid from './Grid';
+import RouteLoader from '../components/RouteLoader';
 
 function Profesores() {
   const [teachers, setTeachers] = useState([]);
-  const [filter, setFilter] = useState({ nombre: '', curso: '', area: '' });
+  const [filter, setFilter] = useState({ course: '', idSubject: '' });
   const [quantity, setQuantity] = useState(15);
   const [page, setPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
     const getTeachers = async () => {
+      setLoading(true);
       try {
         const queryParams = new URLSearchParams({
           cantidad: quantity,
           pagina: page,
-          nombre: filter.nombre,
-          curso: filter.curso,
-          area: filter.area,
+          course: filter.course,
+          idSubject: filter.idSubject,
         }).toString();
 
-        const res = await fetch(`${"http://localhost:3000"}/tutors?${queryParams}`, 
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Cache-Control': 'no-cache',
-              'Pragma': 'no-cache',
-            }
+        const res = await fetch(`http://localhost:3000/tutors?${queryParams}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache',
           }
-        )
+        });
         const data = await res.json();
+        console.log(data);
         if (res.ok) {
           const formattedTeachers = data.data.map((teacher) => ({
             ...teacher,
@@ -48,15 +49,16 @@ function Profesores() {
         }
       } catch (error) {
         console.log(error);
-        return [];
+      } finally {
+        setLoading(false);
       }
-    }
+    };
     getTeachers();
   }, [quantity, page, filter]);
 
   useEffect(() => {
-    const { nombre, curso, area } = router.query;
-    setFilter({ nombre: nombre || '', curso: curso || '', area: area || '' });
+    const { course, idSubject } = router.query;
+    setFilter({ course: course || '', idSubject: idSubject || '' });
   }, [router.query]);
 
   const totalPages = Math.ceil(totalCount / quantity);
@@ -68,7 +70,11 @@ function Profesores() {
         <div className='w-full mx-auto mb-7 lg:w-[25rem] lg:ml-1 lg:mr-0'>
           <Filter setFilter={setFilter} />
         </div>
-        <Grid teachers={teachers} filter={filter} totalCount={totalCount} cantidad={quantity} pagina={page} setPagina={setPage} />
+        {loading ? (
+          <RouteLoader />
+        ) : (
+          <Grid teachers={teachers} filter={filter} totalCount={totalCount} cantidad={quantity} pagina={page} setPagina={setPage} />
+        )}
       </div>
       <div className='flex justify-center bg-gray-100 py-4'>
         {Array.from({ length: totalPages }, (_, index) => (
@@ -96,7 +102,7 @@ function Profesores() {
       </div>
       <Footer />
     </>
-  )
+  );
 }
 
 export default Profesores;

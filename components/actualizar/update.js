@@ -64,7 +64,7 @@ function Actualizar() {
         const response = await fetch('http://localhost:3000/subjects');
         const data = await response.json();
         if (response.ok) {
-          setSubjects(data.data.split(', '));
+          setSubjects(data.data.map(subject => subject.subject));
         } else {
           console.error('Error fetching subjects:', data.message);
         }
