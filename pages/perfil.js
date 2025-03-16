@@ -52,7 +52,7 @@ export default function Perfil() {
                         setUser(userData.data);
                         setLoaded(true);
                     } catch (error) {
-                        console.log(error);
+                        console.error(error);
                     }
                 };
                 getData();

@@ -41,7 +41,6 @@ function Postulate() {
 
   useEffect(() => {
     onAuthStateChanged(auth, (currentUser) => {
-      console.log(currentUser);
       if (!currentUser) {
         setOpen(true);
         setMessage('Debes iniciar sesión para postular');
@@ -102,7 +101,7 @@ function Postulate() {
       setRoute('/');
       setOpen(true);
     } catch ({ message }) {
-      console.log(message);
+      console.error(message);
     }
   };
 

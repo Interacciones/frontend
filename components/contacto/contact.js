@@ -89,7 +89,7 @@ function Contact() {
       setMessage('Mensaje enviado');
       setOpen(true);
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
     }
   };
 

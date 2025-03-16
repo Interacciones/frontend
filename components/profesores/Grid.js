@@ -3,10 +3,6 @@ import React, { useEffect, useState } from 'react';
 import Teacher from './Teacher';
 
 export default function Grid({ teachers, filter, totalCount, cantidad, pagina, setPagina }) {
-  const [filteredTeachers, setFilteredTeachers] = useState([]);
-  console.log("LLEgue a grid");
-  console.log(teachers);
-
   return (
     <>
       {teachers.length === 0 ? (

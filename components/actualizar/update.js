@@ -40,7 +40,6 @@ function Actualizar() {
   useEffect(() => {
     const fetchProfile = async (currentUser) => {
       try {
-        console.log(currentUser)
         const response = await fetch(`https://interaccionesuni.com/tutors-self`, {
           method: 'GET',
           headers: {
@@ -124,7 +123,7 @@ function Actualizar() {
       setRoute('/');
       setOpen(true);
     } catch ({ message }) {
-      console.log(message);
+      console.error('Error updating profile:', message);
     }
   };
 
