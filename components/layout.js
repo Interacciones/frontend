@@ -10,7 +10,7 @@ const inter = Inter({ subsets: ['latin'] })
 export default function RootLayout({ children }) {
   return (
       <html lang="es">
-        <link rel="icon" href="/icon.ico" sizes="any" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
         <body className={inter.className}>
           <AuthContextProvider>
             {children}
