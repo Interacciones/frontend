@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../firebase";
 import Link from 'next/link'
@@ -8,15 +8,41 @@ function ResetPassword() {
   const [email, setEmail] = useState('');
   const [done, setDone] = useState(false);
   const [message, setMessage] = useState('');
+  const [isCooldown, setIsCooldown] = useState(false);
+  const [cooldownTime, setCooldownTime] = useState(0);
+
+  useEffect(() => {
+    let timer;
+    if (isCooldown) {
+      timer = setInterval(() => {
+        setCooldownTime((prevTime) => {
+          if (prevTime <= 1) {
+            clearInterval(timer);
+            setIsCooldown(false);
+            return 0;
+          }
+          return prevTime - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [isCooldown]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isCooldown) {
+      setMessage(`Por favor, espere ${cooldownTime} segundos antes de intentar nuevamente.`);
+      setDone(true);
+      return;
+    }
     try {
       await sendPasswordResetEmail(auth, email);
       setMessage("Si existe una cuenta con ese correo electrónico, se ha enviado un correo para restablecer la contraseña.");
       setDone(true);
+      setIsCooldown(true);
+      setCooldownTime(300); // 300 seconds cooldown (5 minutes)
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -72,6 +98,7 @@ function ResetPassword() {
             <button
               type="submit"
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              disabled={isCooldown}
             >
               Recuperar contraseña
             </button>

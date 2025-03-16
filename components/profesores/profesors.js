@@ -35,7 +35,6 @@ function Profesores() {
           }
         });
         const data = await res.json();
-        console.log(data);
         if (res.ok) {
           const formattedTeachers = data.data.map((teacher) => ({
             ...teacher,
@@ -48,7 +47,7 @@ function Profesores() {
           console.error('Error fetching teachers:', data.message);
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       } finally {
         setLoading(false);
       }
