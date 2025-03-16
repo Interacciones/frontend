@@ -77,7 +77,7 @@ export default function TeacherInfo({ teacher }) {
                     <p className='text-lg font-bold w-full text-left mb-1'>Cursos:</p>
                     {teacher.courses.map((ramo) => {
                         return (
-                            <Link key={ramo} href={`/profesores?curso=${ramo}`}>
+                            <Link key={ramo} href={`/profesores?course=${ramo}`}>
                                 <p className='bg-yellow-400 text-base my-0.5 w-fit mr-1 px-1 rounded-md text-black font-bold cursor-pointer'>
                                     {ramo}
                                 </p>
@@ -89,9 +89,9 @@ export default function TeacherInfo({ teacher }) {
                     <p className='text-lg font-bold w-full text-left mb-1'>Áreas:</p>
                     {teacher.subjects.map((subject) => {
                         return (
-                            <Link key={subject} href={`/profesores?area=${subject}`}>
+                            <Link key={subject.id} href={`/profesores?idSubject=${subject.id}`}>
                                 <p className='bg-yellow-400 text-base my-0.5 w-fit mr-1 px-1 rounded-md text-black font-bold cursor-pointer'>
-                                    {subject}
+                                    {subject.subject}
                                 </p>
                             </Link>
                         );
