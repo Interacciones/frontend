@@ -34,7 +34,7 @@ export default function Profesor() {
                 setComments(teacherData.data.reviews);
                 setLoaded(true);
             } catch (error) {
-                console.log(error);
+                console.error(error);
             }
         };
         getData();
