@@ -2,9 +2,8 @@
 import React, { useState, useEffect } from 'react';
 
 function Filter({ setFilter }) {
-  const [nombre, setNombre] = useState('');
-  const [curso, setCurso] = useState('');
-  const [area, setArea] = useState('');
+  const [course, setCourse] = useState('');
+  const [idSubject, setIdSubject] = useState('');
   const [areas, setAreas] = useState([]);
 
   useEffect(() => {
@@ -13,7 +12,7 @@ function Filter({ setFilter }) {
         const response = await fetch('https://interaccionesuni.com/subjects');
         const data = await response.json();
         if (response.ok) {
-          setAreas(data.data.split(', '));
+          setAreas(data.data);
         } else {
           console.error('Error fetching areas:', data.message);
         }
@@ -32,31 +31,20 @@ function Filter({ setFilter }) {
   };
 
   const handleFilter = () => {
-    setFilter({ nombre, curso, area });
+    setFilter({ course, idSubject });
   };
 
   return (
     <div className='flex flex-wrap mx-auto w-full justify-center'>
         <h1 className='mx-auto text-center font-semibold text-4xl p-4 md:w-full'>Encuentra a tu nuevo <br /> profesor particular:</h1>
         <div className='flex flex-wrap mx-auto w-full md:w-[35%] text-white my-3 lg:my-7 lg:w-full'>
-            <label htmlFor="Nombre" className='w-full bg-indigo-800 p-3 rounded-t-xl'>Nombre</label>
-            <input
-              type="text"
-              name="Nombre"
-              id="Nombre"
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
-              onKeyDown={handleKeyPress}
-              className='w-full bg-indigo-600 focus:outline-none p-3 rounded-b-xl' />
-        </div>
-        <div className='flex flex-wrap mx-auto w-full md:w-[35%] text-white my-3 lg:my-7 rounded-xl lg:w-full'>
             <label htmlFor="Curso" className='w-full bg-indigo-800 p-3 rounded-t-xl'>Curso</label>
             <input
               type="text"
               name="Curso"
               id="Curso"
-              value={curso}
-              onChange={(e) => setCurso(e.target.value)}
+              value={course}
+              onChange={(e) => setCourse(e.target.value)}
               onKeyDown={handleKeyPress}
               className='w-full bg-indigo-600 focus:outline-none p-3 rounded-b-xl' />
         </div>
@@ -65,13 +53,13 @@ function Filter({ setFilter }) {
             <select
               name="Area"
               id="Area"
-              value={area}
-              onChange={(e) => setArea(e.target.value)}
+              value={idSubject}
+              onChange={(e) => setIdSubject(e.target.value)}
               className='w-full bg-indigo-600 focus:outline-none p-3 rounded-b-xl'
             >
               <option value="">Selecciona un área</option>
-              {areas.map((area, index) => (
-                <option key={index} value={area}>{area}</option>
+              {areas.map((area) => (
+                <option key={area.id} value={area.id}>{area.subject}</option>
               ))}
             </select>
         </div>
