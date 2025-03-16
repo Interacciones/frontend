@@ -39,7 +39,7 @@ export default function Perfil() {
             } else {
                 const getData = async () => {
                     try {
-                        const userRes = await fetch(`http://localhost:3000/users-self`, {
+                        const userRes = await fetch(`https://interaccionesuni.com/users-self`, {
                             method: 'GET',
                             headers: {
                                 'Content-Type': 'application/json',
