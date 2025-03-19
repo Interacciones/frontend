@@ -6,6 +6,7 @@ import { auth } from "../firebase";
 import { UserAuth } from '../context/AuthContext';
 import Link from 'next/link'
 import { useRouter } from 'next/router';
+import LoadingIcon from '../components/LoadingIcon'; // Import the LoadingIcon component
 
 /*
 El sign in puede tirar estos errores:
@@ -26,6 +27,7 @@ function Login() {
   const [redirectUser, setRedirectUser] = useState(false);
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
+  const [loading, setLoading] = useState(false); // Add loading state
   const router = useRouter();
   
   if (redirectUser) {
@@ -34,7 +36,7 @@ function Login() {
 
   // Transform the function above to a async await function
   async function registerUser() {
-
+    setLoading(true); // Set loading to true
     if (password === confirmPassword) {
       try {
         const userCredentials = await createUserWithEmailAndPassword(
@@ -42,7 +44,7 @@ function Login() {
           email,
           password
         );
-        await fetch((`https://interaccionesuni.com/users`), {
+        await fetch((`http://localhost:3000/users`), {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -61,14 +63,18 @@ function Login() {
         // setMessage("No se puede registrar con el email proporcionado");
         setMessage(message);
         setError(true);
+      } finally {
+        setLoading(false); // Set loading to false
       }
     } else {
       setMessage("Las contraseñas no coinciden");
       setError(true);
+      setLoading(false); // Set loading to false
     }
   };
 
   async function loginUser() {
+    setLoading(true); // Set loading to true
     try {
       await signInWithEmailAndPassword(
         auth,
@@ -79,6 +85,8 @@ function Login() {
     } catch({message}) {
       setMessage("Email y/o contraseña incorrectos");
       setError(true);
+    } finally {
+      setLoading(false); // Set loading to false
     }
   };
 
@@ -232,7 +240,7 @@ function Login() {
               type="submit"
               className="mb-4 group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              {isRegistering ? 'Registrarse' : 'Iniciar Sesión'}
+              {loading ? <LoadingIcon /> : (isRegistering ? 'Registrarse' : 'Iniciar Sesión')}
             </button>
           </div>
           <Link

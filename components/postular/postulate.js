@@ -56,7 +56,7 @@ function Postulate() {
   useEffect(() => {
     const fetchSubjects = async () => {
       try {
-        const response = await fetch('https://interaccionesuni.com/subjects');
+        const response = await fetch('http://localhost:3000/subjects');
         const data = await response.json();
         if (response.ok) {
           setSubjects(data.data.map(subject => subject.subject));
@@ -85,7 +85,7 @@ function Postulate() {
       formData.append("contactNumber", phone);
       formData.append("priceDescription", price);
   
-      const response = await fetch(`https://interaccionesuni.com/tutors`, {
+      const response = await fetch(`http://localhost:3000/tutors`, {
         method: 'POST',
         body: formData,
         headers: {
