@@ -204,13 +204,14 @@ function Actualizar() {
                 Actualizar perfil de tutor
               </h2>
             </div>
-            <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+            <form className="mt-8 space-y-3" onSubmit={handleSubmit}>
 
-              {/* Campo de telefono de contacto */}
+              {/* Campo de teléfono de contacto */}
               <div className="rounded-md shadow-sm -space-y-px">
-                <div className="mb-4">
+                <h3 className="text-black text-sm font-semibold mb-1">Teléfono</h3> {/* Subtítulo agregado */}
+                <div className="mb-2"> {/* Margen reducido */}
                   <label htmlFor="contact-phone" className="sr-only">
-                    Telefono de contacto
+                    Teléfono de contacto
                   </label>
                   <input
                     id="contact-phone"
@@ -223,14 +224,15 @@ function Actualizar() {
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                    placeholder="Telefono de contacto"
+                    placeholder="Teléfono de contacto"
                   />
                 </div>
               </div>
 
-              {/* Campo de descripcion */}
+              {/* Campo de descripción */}
               <div className="rounded-md shadow-sm -space-y-px">
-                <div className="mb-4 break-words break-all">
+                <h3 className="text-black text-sm font-semibold mb-1">Descripción</h3> {/* Subtítulo agregado */}
+                <div className="mb-2"> {/* Margen reducido */}
                   <label htmlFor="description" className="sr-only">
                     Descripción
                   </label>
@@ -245,11 +247,12 @@ function Actualizar() {
                 </div>
               </div>
 
-              {/* Campo de precio */}
+              {/* Campo de descripción del precio */}
               <div className="rounded-md shadow-sm -space-y-px">
-                <div className="mb-4 break-words break-all">
+                <h3 className="text-black text-sm font-semibold mb-1">Descripción del precio</h3> {/* Subtítulo agregado */}
+                <div className="mb-2"> {/* Margen reducido */}
                   <label htmlFor="price" className="sr-only">
-                    Descripción precio
+                    Descripción del precio
                   </label>
                   <textarea
                     id="price"
@@ -289,9 +292,8 @@ function Actualizar() {
                 </div>
               </div>
 
-              <p className="mt-1 text-sm text-gray-800" id="file_input_help">Cursos anteriores</p>
+              <h3 className="text-black text-sm font-semibold mb-1">Cursos anteriores</h3> {/* Subtítulo agregado */}
               <hr className="my-2 border-gray-300" />
-
               <div className="item-list">
                 {selectedCourses.map(
                   (course, index) =>
@@ -345,9 +347,8 @@ function Actualizar() {
                 </div>
               </div>
 
-              <p className="mt-1 text-sm text-gray-800" id="file_input_help">Áreas anteriores</p>
+              <h3 className="text-black text-sm font-semibold mb-1">Áreas anteriores</h3> {/* Subtítulo agregado */}
               <hr className="my-2 border-gray-300" />
-
               <div className="item-list">
                 {selectedSubjects.map(
                   (subject, index) =>
@@ -373,7 +374,8 @@ function Actualizar() {
 
               {/* Campo de foto de perfil */}
               <div className="rounded-md shadow-sm -space-y-px">
-                <div className="mb-4">
+                <h3 className="text-black text-sm font-semibold mb-1">Subir foto de perfil</h3> {/* Subtítulo agregado */}
+                <div className="mb-2"> {/* Margen reducido */}
                   <label htmlFor="photo" className="sr-only">
                     Foto de perfil
                   </label>
