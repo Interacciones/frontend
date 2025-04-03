@@ -374,7 +374,7 @@ function Actualizar() {
 
               {/* Campo de foto de perfil */}
               <div className="rounded-md shadow-sm -space-y-px">
-                <h3 className="text-black text-sm font-semibold mb-1">Subir foto de perfil</h3> {/* Subtítulo agregado */}
+                <h3 className="text-black text-sm font-semibold mb-1">Actualizar foto de perfil</h3> {/* Subtítulo agregado */}
                 <div className="mb-2"> {/* Margen reducido */}
                   <label htmlFor="photo" className="sr-only">
                     Foto de perfil
