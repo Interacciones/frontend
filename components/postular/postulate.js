@@ -180,13 +180,14 @@ function Postulate() {
                   Postular como profesor particular
                 </h2>
               </div>
-              <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+              <form className="mt-8 space-y-3" onSubmit={handleSubmit}>
 
-                {/* Campo de telefono de contacto */}
+                {/* Campo de teléfono de contacto */}
                 <div className="rounded-md shadow-sm -space-y-px">
-                  <div className="mb-4">
+                  <h3 className="text-black text-sm font-semibold mb-1">Teléfono</h3>
+                  <div className="mb-2">
                     <label htmlFor="contact-phone" className="sr-only">
-                      Telefono de contacto
+                      Teléfono de contacto
                     </label>
                     <input
                       id="contact-phone"
@@ -199,14 +200,15 @@ function Postulate() {
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                      placeholder="Telefono de contacto"
+                      placeholder="+569..."
                     />
                   </div>
                 </div>
 
-                {/* Campo de descripcion */}
+                {/* Campo de descripción */}
                 <div className="rounded-md shadow-sm -space-y-px">
-                  <div className="mb-4 relative">
+                  <h3 className="text-black text-sm font-semibold mb-1">Descripción</h3>
+                  <div className="mb-2">
                     <label htmlFor="description" className="sr-only">
                       Descripción
                     </label>
@@ -217,7 +219,7 @@ function Postulate() {
                       maxLength={maxCharCount}
                       onChange={handleDescriptionChange}
                       className="appearance-none rounded-none relative block w-full h-28 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                      placeholder="Descripción"
+                      placeholder="Hola!!! Soy ..."
                     />
                     <div className="absolute bottom-2 right-2 text-gray-500 text-sm">
                       {descriptionCharCount}/{maxCharCount}
@@ -225,11 +227,12 @@ function Postulate() {
                   </div>
                 </div>
 
-                {/* Campo de precio */}
+                {/* Campo de descripción del precio */}
                 <div className="rounded-md shadow-sm -space-y-px">
-                  <div className="mb-4 relative">
+                  <h3 className="text-black text-sm font-semibold mb-1">Descripción del precio</h3>
+                  <div className="mb-2">
                     <label htmlFor="price" className="sr-only">
-                      Descripción precio
+                      Descripción del precio
                     </label>
                     <textarea
                       id="price"
@@ -238,7 +241,7 @@ function Postulate() {
                       maxLength={maxCharCount}
                       onChange={handlePriceChange}
                       className="appearance-none rounded-none relative block w-full h-28 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                      placeholder="Descripción del precio"
+                      placeholder="Por clase cobro..."
                     />
                     <div className="absolute bottom-2 right-2 text-gray-500 text-sm">
                       {priceCharCount}/{maxCharCount}
@@ -247,11 +250,13 @@ function Postulate() {
                 </div>
 
                 {/* Campo de curso */}
-                <div className="flex flex-row justify-between">
-                  <label htmlFor="course" className="sr-only">
-                    Curso
-                  </label>
-                  <input
+                <div className="flex flex-col">
+                  <h3 className="text-black text-sm font-semibold mb-1">Agregar curso</h3>
+                  <div className="flex flex-row justify-between">
+                    <label htmlFor="course" className="sr-only">
+                      Curso
+                    </label>
+                    <input
                       id="course"
                       name="course"
                       type="text"
@@ -261,28 +266,29 @@ function Postulate() {
                       className="appearance-none rounded-none relative block w-3/4 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                       placeholder="Nombre curso (ej. Calculo I)"
                     />
-                  <select
-                    id="subject"
-                    name="subject"
-                    value={subject}
-                    onChange={(e) => setSubject(e.target.value)}
-                    className="appearance-none rounded-none relative block w-3/4 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  >
-                    <option value="" disabled>Selecciona un área</option>
-                    {subjects.map((subject, index) => (
-                      <option key={index} value={subject}>
-                        {subject}
-                      </option>
-                    ))}
-                  </select>
-                  <div>
-                    <button
-                      type="button"
-                      onClick={handleCourseChange}
-                      className="group relative justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    <select
+                      id="subject"
+                      name="subject"
+                      value={subject}
+                      onChange={(e) => setSubject(e.target.value)}
+                      className="appearance-none rounded-none relative block w-3/4 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                     >
-                      Agregar
-                    </button>
+                      <option value="" disabled>Selecciona un área</option>
+                      {subjects.map((subject, index) => (
+                        <option key={index} value={subject}>
+                          {subject}
+                        </option>
+                      ))}
+                    </select>
+                    <div>
+                      <button
+                        type="button"
+                        onClick={handleCourseChange}
+                        className="group relative justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                      >
+                        Agregar
+                      </button>
+                    </div>
                   </div>
                 </div>
 
@@ -311,6 +317,7 @@ function Postulate() {
 
                 {/* Campo de foto de perfil */}
                 <div className="rounded-md shadow-sm -space-y-px">
+                  <h3 className="text-black text-sm font-semibold mb-1">Subir foto de perfil</h3>
                   <div className="mb-4">
                     <label htmlFor="photo" className="sr-only">
                       Foto de perfil
