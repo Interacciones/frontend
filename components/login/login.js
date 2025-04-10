@@ -36,7 +36,7 @@ function Login() {
 
   // Transform the function above to a async await function
   async function registerUser() {
-    setLoading(true); // Set loading to true
+    setLoading(true);
     if (password === confirmPassword) {
       try {
         const userCredentials = await createUserWithEmailAndPassword(
@@ -44,6 +44,7 @@ function Login() {
           email,
           password
         );
+        
         await fetch((`https://interaccionesuni.com/users`), {
           method: 'POST',
           headers: {
@@ -56,37 +57,71 @@ function Login() {
             "lastName": apellido, 
           }),
         });
+        
         const createdUser = userCredentials.user;
         await sendEmailVerification(createdUser);
-        setRedirectUser(true)
-      } catch({message}) {
-        // setMessage("No se puede registrar con el email proporcionado");
-        setMessage(message);
+        
+        // Cerrar sesión después del registro
+        await auth.signOut();
+        
+        // Mostrar mensaje de éxito y instrucciones
+        setMessage("Registro exitoso. Por favor, verifica tu correo electrónico antes de iniciar sesión.");
+        setError(false); // No es un error, es un mensaje de éxito
+        
+        // Volver a la vista de inicio de sesión
+        setIsRegistering(false);
+        
+        // Limpiar los campos del formulario
+        setEmail('');
+        setPassword('');
+        setConfirmPassword('');
+        setNombre('');
+        setApellido('');
+        
+      } catch(error) {
+        // Manejar específicamente el caso de correo ya en uso
+        if (error.code === 'auth/email-already-in-use') {
+          setMessage("Este correo electrónico ya está registrado. Por favor, usa otro o intenta iniciar sesión.");
+        } else {
+          setMessage(error.message);
+        }
         setError(true);
       } finally {
-        setLoading(false); // Set loading to false
+        setLoading(false);
       }
     } else {
       setMessage("Las contraseñas no coinciden");
       setError(true);
-      setLoading(false); // Set loading to false
+      setLoading(false);
     }
   };
 
   async function loginUser() {
-    setLoading(true); // Set loading to true
+    setLoading(true);
     try {
-      await signInWithEmailAndPassword(
+      const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
         password
       );
-      setRedirectUser(true)
+      
+      // Verificar si el correo electrónico está verificado
+      if (!userCredential.user.emailVerified) {
+        // Si no está verificado, cerrar sesión y mostrar mensaje
+        await auth.signOut();
+        setMessage("Por favor verifica tu correo electrónico antes de iniciar sesión. Revisa tu bandeja de entrada.");
+        setError(true);
+        setLoading(false);
+        return;
+      }
+      
+      // Si está verificado, redirigir al usuario
+      setRedirectUser(true);
     } catch({message}) {
       setMessage("Email y/o contraseña incorrectos");
       setError(true);
     } finally {
-      setLoading(false); // Set loading to false
+      setLoading(false);
     }
   };
 
@@ -215,9 +250,9 @@ function Login() {
           </div>
           )}
 
-          {error && (
-            <div className="flex items-left h-2">
-              <span className='text-red-600 text-xs'>{message}</span>
+          {message && (
+            <div className={`flex items-left h-auto ${error ? 'text-red-600' : 'text-green-600'} text-xs`}>
+              <span>{message}</span>
             </div>
           )}
 
@@ -238,7 +273,10 @@ function Login() {
           <div>
             <button
               type="submit"
-              className="mb-4 group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              disabled={loading}
+              className={`mb-4 group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white ${
+                loading ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'
+              } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
             >
               {loading ? <LoadingIcon /> : (isRegistering ? 'Registrarse' : 'Iniciar Sesión')}
             </button>

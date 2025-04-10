@@ -23,10 +23,10 @@ export default function Preguntas() {
       pregunta: "Quiero actualizar mi información de profe particular ¿Cómo lo hago?",
       respuesta: "Para poder actualizar la información de su perfil, deben ingresar a su perfil y apretar el botón de \"Perfil de profesor\". Esto los llevará a su perfil y en la esquina superior izquierda deberían ver un ícono que al apretarlo debería permitirles actualizar su perfil. Ahí cambian la información que deseen cambiar, envían la solicitud y esta será recibida por el equipo. Una vez que la solicitud sea aceptada, recibirán un mail de confirmación. "
     },
-    {
-      pregunta: "Inicié sesión y verifiqué pero no me funcionan los botones de la página, ¿Qué hago?",
-      respuesta: "Este caso es muy raro, pero si llegase a ocurrir, por favor cierren sesión y vuelvan a iniciar sesión. Si el problema persiste, por favor contáctenos a través de la página de contacto."
-    }
+    // {
+    //   pregunta: "Inicié sesión y verifiqué pero no me funcionan los botones de la página, ¿Qué hago?",
+    //   respuesta: "Este caso es muy raro, pero si llegase a ocurrir, por favor cierren sesión y vuelvan a iniciar sesión. Si el problema persiste, por favor contáctenos a través de la página de contacto."
+    // }
   ];
 
   return (
