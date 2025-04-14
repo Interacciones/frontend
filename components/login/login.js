@@ -156,8 +156,8 @@ function Login() {
                 name="email"
                 type="email"
                 autoComplete="email"
-                pattern=".+@uc\.cl"
-                title="@uc.cl"
+                pattern=".+uc\.cl"
+                title="uc.cl"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
