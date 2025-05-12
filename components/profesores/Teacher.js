@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import React from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 
 function Star() {
   return (
@@ -27,9 +27,20 @@ function Teacher({ props }) {
     return +(Math.round(num + "e+2")  + "e-2");
   }
 
-  const maxCoursesToShow = 4;
-  const coursesToShow = props.coursesInfo.slice(0, maxCoursesToShow);
-  const hasMoreCourses = props.coursesInfo.length > maxCoursesToShow;
+  // Determinar si los cursos deben estar centrados o no
+  const [shouldCenterCourses, setShouldCenterCourses] = useState(true);
+  const coursesRef = useRef(null);
+  
+  useEffect(() => {
+    if (coursesRef.current) {
+      // Comprobar si los cursos exceden el ancho del contenedor
+      const container = coursesRef.current;
+      const totalWidth = Array.from(container.children).reduce(
+        (sum, child) => sum + child.offsetWidth + 8, 0); // 8px por los márgenes
+      
+      setShouldCenterCourses(totalWidth <= container.offsetWidth);
+    }
+  }, [props.coursesInfo]);
 
   return (
     <Link href={`profesores/${props.id}`} className='relative overflow-hidden group cursor-pointer bg-indigo-800 text-white rounded-[30px] p-6 h-72 w-72'>
@@ -37,18 +48,28 @@ function Teacher({ props }) {
             <img src={props.photo} alt="Foto profesor" className='relative object-cover mx-auto rounded-lg w-44 h-44'/>
             <div className='absolute translate-y-8 top-0 left-0 w-full h-full bg-gradient-to-t from-indigo-800 to-transparent '></div>
         </div>
-        <div className='absolute h-fit self-center flex flex-wrap justify-center w-[85%] mx-auto translate-y-[-15px] group-hover:-translate-y-44 transition-all place-self-center'>
-          {coursesToShow.map((ramo, index) => (
-            <h2 key={index} className='bg-yellow-400 font-bold w-fit h-fit rounded-sm px-1 mx-[4px] my-[2px] text-black text-sm'>{ramo}</h2>
+        <div 
+          ref={coursesRef}
+          className={`absolute h-fit flex ${shouldCenterCourses ? 'justify-center' : 'justify-start'} overflow-x-auto scrollbar-hide whitespace-nowrap py-1 w-[85%] mx-auto top-4 transition-all`}
+        >
+          <style jsx>{`
+            .scrollbar-hide::-webkit-scrollbar {
+              display: none;
+            }
+            .scrollbar-hide {
+              -ms-overflow-style: none;
+              scrollbar-width: none;
+            }
+          `}</style>
+          {props.coursesInfo.map((ramo, index) => (
+            <h2 key={index} className='bg-yellow-400 font-bold w-fit h-fit rounded-sm px-1 mx-[4px] my-[2px] text-black text-sm flex-shrink-0'>{ramo}</h2>
           ))}
-          {hasMoreCourses && <h2 className='bg-yellow-400 font-bold w-fit h-fit rounded-sm px-1 mx-[4px] my-[2px] text-black text-sm'>...</h2>}
         </div>
-        <div className='absolute h-fit self-center flex flex-wrap justify-center w-[85%] mx-auto place-self-center -translate-y-40 group-hover:translate-y-[-15px] transition-all'>
-          <Star /> <h2 className='place-items-center font-semibold'>{roundToTwo(props.avgRating) ? roundToTwo(props.avgRating) : "-"}</h2>
+        <div className='absolute bottom-6 left-0 right-0 overflow-hidden transition-all group-hover:bottom-16'>
+          <h1 className='mx-auto w-full overflow-hidden whitespace-nowrap text-ellipsis font-bold text-center drop-shadow-[0_2px_3px_rgba(0,0,0,.6)] group-hover:drop-shadow-[0_2px_5px_rgba(0,0,0,.85)] transition-all text-xl'>{fullName}</h1>
         </div>
-        <div className='overflow-hidden'>
-          <h1 className='mx-auto w-full overflow-hidden whitespace-nowrap text-ellipsis font-bold text-center drop-shadow-[0_2px_3px_rgba(0,0,0,.6)] group-hover:drop-shadow-[0_2px_5px_rgba(0,0,0,.85)] transition-all text-xl mt-32'>{fullName}</h1>
-          <p className='text-justify text-ellipsis overflow-hidden w-full drop-shadow-[0_2px_3px_rgba(0,0,0,.6)] group-hover:drop-shadow-[0_2px_5px_rgba(0,0,0,.85)] transition-all text-sm mt-1 h-[35%]'>{props.description}</p>
+        <div className='absolute h-fit flex justify-center items-center w-full left-0 right-0 mx-auto opacity-0 group-hover:opacity-100 transition-all bottom-6'>
+          <Star /> <h2 className='place-items-center font-semibold ml-1'>{roundToTwo(props.avgRating) ? roundToTwo(props.avgRating) : "-"}</h2>
         </div>
     </Link>
   )
