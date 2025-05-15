@@ -35,6 +35,9 @@ export default function Header() {
                     <Link href="/profesores" className="text-sm font-semibold leading-6 text-white hover:text-gray-500">
                         Buscar Profesor Particular
                     </Link>
+                    <Link href="/emprendimientos" className="text-sm font-semibold leading-6 text-white hover:text-gray-500">
+                        Emprendimientos
+                    </Link>
                     <Link href="/preguntas" className="text-sm font-semibold leading-6 text-white hover:text-gray-500">
                         Preguntas Frecuentes
                     </Link>
@@ -85,6 +88,9 @@ export default function Header() {
                             <div className="space-y-2 py-6">
                                 <Link href="/profesores" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
                                     Buscar Profesor Particular
+                                </Link>
+                                <Link href="/emprendimientos" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                                    Emprendimientos
                                 </Link>
                                 <Link href="/preguntas" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
                                     Preguntas Frecuentes

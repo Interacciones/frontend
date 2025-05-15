@@ -2,13 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-import Filter from './Filter';
 import Grid from './Grid';
 import RouteLoader from '../components/RouteLoader';
 
-function Profesores() {
-  const [teachers, setTeachers] = useState([]);
-  const [filter, setFilter] = useState({ course: '', idSubject: '' });
+function Emprendimientos() {
+  const [projects, setProjects] = useState([]);
   const [quantity, setQuantity] = useState(15);
   const [page, setPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
@@ -16,17 +14,15 @@ function Profesores() {
   const router = useRouter();
 
   useEffect(() => {
-    const getTeachers = async () => {
+    const getProjects = async () => {
       setLoading(true);
       try {
         const queryParams = new URLSearchParams({
-          cantidad: quantity,
-          pagina: page,
-          course: filter.course,
-          idSubject: filter.idSubject,
+          quantity: quantity,
+          page: page,
         }).toString();
 
-        const res = await fetch(`http://localhost:3000/tutors?${queryParams}`, {
+        const res = await fetch(`http://localhost:3000/projects?${queryParams}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -36,15 +32,10 @@ function Profesores() {
         });
         const data = await res.json();
         if (res.ok) {
-          const formattedTeachers = data.data.map((teacher) => ({
-            ...teacher,
-            fullName: `${teacher.name} ${teacher.lastName}`,
-            coursesInfo: teacher.courses,
-          }));
-          setTeachers(formattedTeachers);
-          setTotalCount(data.totalCount);
+          setProjects(data.data);
+          setTotalCount(data.data.length);
         } else {
-          console.error('Error fetching teachers:', data.message);
+          console.error('Error fetching projects:', data.message);
         }
       } catch (error) {
         console.error(error);
@@ -52,27 +43,20 @@ function Profesores() {
         setLoading(false);
       }
     };
-    getTeachers();
-  }, [quantity, page, filter]);
-
-  useEffect(() => {
-    const { course, idSubject } = router.query;
-    setFilter({ course: course || '', idSubject: idSubject || '' });
-  }, [router.query]);
+    getProjects();
+  }, [quantity, page]);
 
   const totalPages = Math.ceil(totalCount / quantity);
 
   return (
     <>
       <Header />
-      <div className="min-h-screen flex flex-wrap justify-between text-black bg-gray-100 py-4 lg:py-12 px-4 sm:px-6 lg:px-8">
-        <div className='w-full mx-auto mb-7 lg:w-[25rem] lg:ml-1 lg:mr-0'>
-          <Filter setFilter={setFilter} />
-        </div>
+      <div className="min-h-screen flex flex-wrap justify-center text-black bg-gray-100 py-4 lg:py-12 px-4 sm:px-6 lg:px-8">
+        <h1 className="w-full text-center text-3xl font-bold mb-8 text-indigo-800">Emprendimientos Universitarios</h1>
         {loading ? (
           <RouteLoader />
         ) : (
-          <Grid teachers={teachers} filter={filter} totalCount={totalCount} cantidad={quantity} pagina={page} setPagina={setPage} />
+          <Grid projects={projects} totalCount={totalCount} cantidad={quantity} pagina={page} setPagina={setPage} />
         )}
       </div>
       <div className='flex justify-center bg-gray-100 py-4'>
@@ -104,4 +88,4 @@ function Profesores() {
   );
 }
 
-export default Profesores;
+export default Emprendimientos; 

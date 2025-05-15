@@ -45,7 +45,7 @@ function Login() {
           password
         );
         
-        await fetch((`https://interaccionesuni.com/users`), {
+        await fetch((`http://localhost:3000/users`), {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
