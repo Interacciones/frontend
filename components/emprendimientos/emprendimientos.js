@@ -4,6 +4,7 @@ import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Grid from './Grid';
 import RouteLoader from '../components/RouteLoader';
+import Link from 'next/link';
 
 function Emprendimientos() {
   const [projects, setProjects] = useState([]);
@@ -52,7 +53,14 @@ function Emprendimientos() {
     <>
       <Header />
       <div className="min-h-screen flex flex-wrap justify-center text-black bg-gray-100 py-4 lg:py-12 px-4 sm:px-6 lg:px-8">
-        <h1 className="w-full text-center text-3xl font-bold mb-8 text-indigo-800">Emprendimientos Universitarios</h1>
+        <div className="w-full flex flex-col items-center mb-8">
+          <h1 className="text-3xl font-bold text-indigo-800 mb-4">Emprendimientos Universitarios</h1>
+          <Link href="/postular-emprendimiento">
+            <button className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md transition-colors">
+              Publicar mi emprendimiento
+            </button>
+          </Link>
+        </div>
         {loading ? (
           <RouteLoader />
         ) : (
