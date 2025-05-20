@@ -18,10 +18,10 @@ export default function Page() {
           <div className="relative max-w-7xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-center">
             <div className="text-center lg:text-left lg:w-1/2 lg:pr-8">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-indigo-900">
-                Conecta con profesores particulares en tu comunidad académica
+                Encuentra a tu profesor particular!
               </h1>
               <p className="mt-6 text-lg md:text-xl text-gray-600 max-w-3xl">
-                Interacciones empareja estudiantes que necesitan ayuda académica con profesores de confianza en su comunidad universitaria, a demanda.
+                Busca a tu profesor particular en tu universidad, y contacta con ellos para coordinar tus clases. También puedes postularte como profesor particular y ayudar a otros.
               </p>
               <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Link
@@ -54,7 +54,7 @@ export default function Page() {
           </div>
         </div>
         
-        {/* Social Proof Section */}
+        {/* Social Proof Section
         <div className="bg-white py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <p className="text-center text-gray-500 font-medium">
@@ -75,7 +75,7 @@ export default function Page() {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
         
         {/* How It Works */}
         <div className="bg-white py-16">
@@ -126,7 +126,7 @@ export default function Page() {
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
                       </svg>
                     </div>
-                    <p className="ml-3 text-lg text-gray-600">Profesores verificados de tu propia institución educativa</p>
+                    <p className="ml-3 text-lg text-gray-600">Profesores particulares de tu propia institución educativa</p>
                   </li>
                   <li className="flex items-start">
                     <div className="flex-shrink-0">
@@ -174,7 +174,7 @@ export default function Page() {
           <div className="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl font-bold text-white">Mejora tu rendimiento académico hoy</h2>
             <p className="mt-4 text-xl text-indigo-100">
-              Únete a miles de estudiantes que ya han mejorado sus calificaciones con Interacciones
+              Únete a los estudiantes que ya han mejorado sus calificaciones con Interacciones
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
               <Link
