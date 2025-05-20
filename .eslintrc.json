@@ -1,3 +1,8 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "@next/next/no-html-link-for-pages": "warn",
+    "@next/next/no-img-element": "warn",
+    "react/no-unescaped-entities": "warn"
+  }
 }

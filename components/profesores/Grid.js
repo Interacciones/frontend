@@ -22,7 +22,7 @@ export default function Grid({ teachers, filter, totalCount }) {
           <div className="mb-6 flex justify-between items-center">
             <h2 className="text-xl font-semibold text-gray-900">
               {totalCount} {totalCount === 1 ? 'profesor encontrado' : 'profesores encontrados'}
-              {filter.course && <span className="ml-2 text-indigo-600">para "{filter.course}"</span>}
+              {filter.course && <span className="ml-2 text-indigo-600">para &ldquo;{filter.course}&rdquo;</span>}
             </h2>
             
             <div className="flex items-center text-sm text-gray-600">

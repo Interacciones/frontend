@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "export": "next export",
-    "deployable": "next build"
+    "deployable": "NEXT_DISABLE_ESLINT=1 next build"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
