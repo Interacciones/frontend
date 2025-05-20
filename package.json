@@ -7,8 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "export": "next export",
-    "deployable": "NEXT_DISABLE_ESLINT=1 next build"
+    "lint:fix": "next lint --fix",
+    "lint:fix:all": "eslint --fix --fix-type problem,suggestion,layout 'components/**/*.js' 'pages/**/*.js'",
+    "export": "next export"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",

@@ -131,7 +131,7 @@ function Teacher({ props }) {
         container.removeEventListener('scroll', checkArrows);
       };
     }
-  }, [props.coursesInfo, isMobile]);
+  }, [props.coursesInfo, isMobile, checkArrows]);
 
   const rating = roundToTwo(props.avgRating);
   

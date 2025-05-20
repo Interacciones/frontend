@@ -1,4 +1,5 @@
 import Content from './Content';
+import Link from 'next/link';
 
 function Page({ id, teacher, comments }) {
     return (
@@ -17,12 +18,12 @@ function Page({ id, teacher, comments }) {
                         <p className="text-gray-600 mb-6">
                             No se encontró ningún profesor con ese ID. Es posible que haya sido eliminado o que la URL no sea correcta.
                         </p>
-                        <a 
+                        <Link 
                             href="/profesores" 
                             className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-800 hover:bg-indigo-700 transition-colors"
                         >
                             Volver a la lista de profesores
-                        </a>
+                        </Link>
                     </div>
                 </div>
             )}

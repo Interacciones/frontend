@@ -1,4 +1,5 @@
 import Content from './Content';
+import Link from 'next/link';
 
 function Page({ user }) {
     return (
@@ -16,9 +17,9 @@ function Page({ user }) {
                         <h2 className="mt-4 text-2xl font-bold text-gray-900">Usuario no encontrado</h2>
                         <p className="mt-2 text-base text-gray-600">No se encontró el usuario solicitado. Por favor, inténtalo de nuevo más tarde.</p>
                         <div className="mt-6">
-                            <a href="/" className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-indigo-800 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all">
+                            <Link href="/" className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-indigo-800 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all">
                                 Volver al inicio
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </div>
