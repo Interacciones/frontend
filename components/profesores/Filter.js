@@ -69,11 +69,11 @@ function Filter({ setFilter }) {
             name="area"
             value={idSubject}
             onChange={(e) => setIdSubject(e.target.value)}
-            className="block w-full rounded-md border border-gray-300 py-3 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
+            className="block w-full rounded-md border border-gray-300 py-3 pl-3 pr-10 text-base text-gray-900 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
           >
             <option value="">Todas las áreas</option>
             {areas.map((area) => (
-              <option key={area.id} value={area.id}>{area.subject}</option>
+              <option key={area.id} value={area.id} className="text-gray-900">{area.subject}</option>
             ))}
           </select>
         </div>
