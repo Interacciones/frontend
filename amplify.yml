@@ -1,0 +1,22 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - echo "Node version $(node -v)"
+        - echo "NPM version $(npm -v)"
+        - npm ci
+    build:
+      commands:
+        - echo "Starting build process"
+        - npm run deployable
+        - echo "Build completed"
+        - ls -la
+        - ls -la out || echo "out directory not found"
+  artifacts:
+    baseDirectory: out
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/* 
