@@ -1,10 +1,15 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 
-function Filter({ setFilter }) {
-  const [course, setCourse] = useState('');
-  const [idSubject, setIdSubject] = useState('');
+function Filter({ setFilter, initialFilter = { course: '', idSubject: '' } }) {
+  const [course, setCourse] = useState(initialFilter.course || '');
+  const [idSubject, setIdSubject] = useState(initialFilter.idSubject || '');
   const [areas, setAreas] = useState([]);
+
+  useEffect(() => {
+    setCourse(initialFilter.course || '');
+    setIdSubject(initialFilter.idSubject || '');
+  }, [initialFilter]);
 
   useEffect(() => {
     const fetchAreas = async () => {
@@ -34,44 +39,94 @@ function Filter({ setFilter }) {
     setFilter({ course, idSubject });
   };
 
+  const handlePopularFilter = (courseName) => {
+    setCourse(courseName);
+    setFilter({ course: courseName, idSubject });
+  };
+
   return (
-    <div className='flex flex-wrap mx-auto w-full justify-center'>
-        <h1 className='mx-auto text-center font-semibold text-4xl p-4 md:w-full'>Encuentra a tu nuevo <br /> profesor particular:</h1>
-        <div className='flex flex-wrap mx-auto w-full md:w-[35%] text-white my-3 lg:my-7 lg:w-full'>
-            <label htmlFor="Curso" className='w-full bg-indigo-800 p-3 rounded-t-xl'>Curso</label>
+    <div className="bg-white rounded-xl shadow-xl p-6 transform transition-all">
+      <div className="grid grid-cols-1 md:grid-cols-7 gap-4 items-end">
+        <div className="md:col-span-3">
+          <label htmlFor="curso" className="block text-sm font-medium text-gray-700 mb-1">
+            Curso
+          </label>
+          <div className="relative rounded-md shadow-sm">
             <input
               type="text"
-              name="Curso"
-              id="Curso"
+              name="curso"
+              id="curso"
               value={course}
               onChange={(e) => setCourse(e.target.value)}
               onKeyDown={handleKeyPress}
-              className='w-full bg-indigo-600 focus:outline-none p-3 rounded-b-xl' />
+              placeholder="Ej: Cálculo I, Programación, Física"
+              className="block w-full rounded-md border-gray-300 py-3 pl-4 pr-12 focus:border-indigo-500 focus:ring-indigo-500 text-gray-900"
+            />
+            <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+              <svg className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
+              </svg>
+            </div>
+          </div>
         </div>
-        <div className='flex flex-wrap mx-auto w-full md:w-[35%] text-white my-3 lg:my-7 rounded-xl lg:w-full'>
-            <label htmlFor="Area" className='w-full bg-indigo-800 p-3 rounded-t-xl'>Área de estudio</label>
-            <select
-              name="Area"
-              id="Area"
-              value={idSubject}
-              onChange={(e) => setIdSubject(e.target.value)}
-              className='w-full bg-indigo-600 focus:outline-none p-3 rounded-b-xl'
-            >
-              <option value="">Selecciona un área</option>
-              {areas.map((area) => (
-                <option key={area.id} value={area.id}>{area.subject}</option>
-              ))}
-            </select>
+        
+        <div className="md:col-span-3">
+          <label htmlFor="area" className="block text-sm font-medium text-gray-700 mb-1">
+            Área de estudio
+          </label>
+          <select
+            id="area"
+            name="area"
+            value={idSubject}
+            onChange={(e) => setIdSubject(e.target.value)}
+            className="block w-full rounded-md border border-gray-300 py-3 pl-3 pr-10 text-base text-gray-900 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
+          >
+            <option value="">Todas las áreas</option>
+            {areas.map((area) => (
+              <option key={area.id} value={area.id} className="text-gray-900">{area.subject}</option>
+            ))}
+          </select>
         </div>
+        
         <button
           onClick={handleFilter}
-          className='font-semibold text-black flex flex-wrap items-center justify-center bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-600 transition-all rounded-md mx-auto w-44 px-3.5 py-2.5 text-sm md:my-auto md:h-16 lg:h-fit'
+          className="md:col-span-1 w-full inline-flex justify-center items-center px-4 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-800 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all"
         >
-          <img src="/lens.svg" className='h-3 mr-2' alt=""/>
+          <svg className="mr-2 -ml-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
+          </svg>
           Buscar
         </button>
+      </div>
+      
+      {/* Filtros populares */}
+      <div className="mt-6">
+        <div className="flex items-center">
+          <span className="text-sm font-medium text-gray-700 mr-3">Filtros populares:</span>
+          <div className="flex flex-wrap gap-2">
+            <button 
+              onClick={() => handlePopularFilter('Cálculo I')}
+              className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 hover:bg-indigo-200"
+            >
+              Cálculo I
+            </button>
+            <button 
+              onClick={() => handlePopularFilter('Optimización')}
+              className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 hover:bg-indigo-200"
+            >
+              Optimización
+            </button>
+            <button 
+              onClick={() => handlePopularFilter('Programación')}
+              className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 hover:bg-indigo-200"
+            >
+              Programación
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-  )
+  );
 }
 
 export default Filter;
