@@ -1,22 +1,31 @@
 "use client";
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Teacher from './Teacher';
 
-export default function Grid({ teachers, filter, totalCount, cantidad, pagina, setPagina }) {
+export default function Grid({ teachers, filter, totalCount }) {
   return (
     <>
       {teachers.length === 0 ? (
-        <div className='my-auto mx-auto font-medium w-full text-2xl md:text-3xl lg:text-4xl lg:text-left lg:max-w-[55%]'>
-          <span className='font-bold'>¡Ups! </span>No se encontraron profesores. Prueba con otros filtros o inténtalo de nuevo más tarde.
+        <div className='w-full max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-md text-center'>
+          <span className='font-bold text-indigo-800'>¡Ups! </span>
+          <span className='text-gray-700'>No se encontraron profesores. Prueba con otros filtros o inténtalo de nuevo más tarde.</span>
         </div>
       ) : (
-        <div className='grid mx-auto justify-items-center gap-10 w-full lg:w-[51%] xl:w-[62%] lg:max-w-fit lg:mx-auto sm:grid-cols-1 md:grid-cols-2 ls-2 md:gap-10 lg:grid-cols-2 lg:gap-20 xl:grid-cols-3 xl:gap-14'>
-          {teachers.map((teacher) => (
-            <Teacher
-              props={teacher}
-              key={teacher.id}
-            />
-          ))}
+        <div className='w-full max-w-7xl mx-auto'>
+          <div className='mb-4 px-4'>
+            <h2 className='text-xl font-bold text-gray-700'>
+              {totalCount} {totalCount === 1 ? 'profesor encontrado' : 'profesores encontrados'}
+              {filter.course && ` para "${filter.course}"`}
+            </h2>
+          </div>
+          <div className='grid gap-6 mx-auto justify-items-center w-full grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+            {teachers.map((teacher) => (
+              <Teacher
+                props={teacher}
+                key={teacher.id}
+              />
+            ))}
+          </div>
         </div>
       )}
     </>
