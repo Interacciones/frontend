@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
@@ -15,50 +15,79 @@ function Profesores() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  useEffect(() => {
-    const getTeachers = async () => {
-      setLoading(true);
-      try {
-        const queryParams = new URLSearchParams({
-          cantidad: quantity,
-          pagina: page,
-          course: filter.course,
-          idSubject: filter.idSubject,
-        }).toString();
+  // Debounced fetch function to prevent multiple API calls
+  const getTeachers = useCallback(async (filterParams) => {
+    setLoading(true);
+    try {
+      const queryParams = new URLSearchParams({
+        cantidad: quantity,
+        pagina: page,
+        course: filterParams.course || '',
+        idSubject: filterParams.idSubject || '',
+      }).toString();
 
-        const res = await fetch(`https://interaccionesuni.com/tutors?${queryParams}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Cache-Control': 'no-cache',
-            'Pragma': 'no-cache',
-          }
-        });
-        const data = await res.json();
-        if (res.ok) {
-          const formattedTeachers = data.data.map((teacher) => ({
-            ...teacher,
-            fullName: `${teacher.name} ${teacher.lastName}`,
-            coursesInfo: teacher.courses,
-          }));
-          setTeachers(formattedTeachers);
-          setTotalCount(data.totalCount);
-        } else {
-          console.error('Error fetching teachers:', data.message);
+      const res = await fetch(`https://interaccionesuni.com/tutors?${queryParams}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache',
         }
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
+      });
+      const data = await res.json();
+      if (res.ok) {
+        const formattedTeachers = data.data.map((teacher) => ({
+          ...teacher,
+          fullName: `${teacher.name} ${teacher.lastName}`,
+          coursesInfo: teacher.courses,
+        }));
+        setTeachers(formattedTeachers);
+        setTotalCount(data.totalCount);
+      } else {
+        console.error('Error fetching teachers:', data.message);
       }
-    };
-    getTeachers();
-  }, [quantity, page, filter]);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }, [quantity, page]);
 
+  // Effect to fetch teachers when filter, quantity, or page changes
   useEffect(() => {
+    getTeachers(filter);
+  }, [getTeachers, filter]);
+
+  // Effect to sync URL parameters with filter state
+  useEffect(() => {
+    if (!router.isReady) return;
+    
     const { course, idSubject } = router.query;
-    setFilter({ course: course || '', idSubject: idSubject || '' });
-  }, [router.query]);
+    const newFilter = {
+      course: course || '',
+      idSubject: idSubject || ''
+    };
+    
+    // Only update if values are different to prevent unnecessary rerenders
+    if (newFilter.course !== filter.course || newFilter.idSubject !== filter.idSubject) {
+      setFilter(newFilter);
+    }
+  }, [router.isReady, router.query]);
+
+  // Handler for the Filter component to update both state and URL
+  const handleFilterChange = (newFilter) => {
+    setFilter(newFilter);
+    
+    // Update URL without full page reload
+    const query = {};
+    if (newFilter.course) query.course = newFilter.course;
+    if (newFilter.idSubject) query.idSubject = newFilter.idSubject;
+    
+    router.push({
+      pathname: router.pathname,
+      query
+    }, undefined, { shallow: true });
+  };
 
   const totalPages = Math.ceil(totalCount / quantity);
 
@@ -83,7 +112,7 @@ function Profesores() {
       
       {/* Filter Section */}
       <div className="relative z-10 -mt-8 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <Filter setFilter={setFilter} />
+        <Filter setFilter={handleFilterChange} initialFilter={filter} />
       </div>
       
       {/* Results Section */}
