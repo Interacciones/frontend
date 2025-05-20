@@ -72,7 +72,7 @@ function Profesores() {
     if (newFilter.course !== filter.course || newFilter.idSubject !== filter.idSubject) {
       setFilter(newFilter);
     }
-  }, [router.isReady, router.query]);
+  }, [router.isReady, router.query, filter.course, filter.idSubject]);
 
   // Handler for the Filter component to update both state and URL
   const handleFilterChange = (newFilter) => {

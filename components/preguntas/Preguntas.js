@@ -3,6 +3,7 @@ import React from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Acordeon from './Acordeon';
+import Link from 'next/link';
 
 export default function Preguntas() {
   // Lista de preguntas frecuentes
@@ -64,12 +65,12 @@ export default function Preguntas() {
               Si tienes alguna otra duda o necesitas ayuda adicional, no dudes en contactarnos.
             </p>
             <div className="mt-4">
-              <a 
+              <Link 
                 href="/contacto" 
                 className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-indigo-800 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all"
               >
                 Contactar soporte
-              </a>
+              </Link>
             </div>
           </div>
         </div>

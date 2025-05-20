@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { UserAuth } from '../context/AuthContext';
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
+import Image from 'next/image';
 
 export default function TeacherInfo({ user }) {
     const fullName = user && user.name && user.lastName ? `${user.name} ${user.lastName}` : '';
@@ -83,10 +84,12 @@ export default function TeacherInfo({ user }) {
                         {/* Profile Photo */}
                         <div className="flex justify-center">
                             <div className="w-32 h-32 border-4 border-white rounded-full overflow-hidden shadow-lg bg-white">
-                                <img 
+                                <Image 
                                     className="w-full h-full object-cover" 
                                     src={tutorPhoto || 'https://interac-ciones.s3.amazonaws.com/default.jpg'} 
                                     alt={fullName || 'Usuario'}
+                                    width={128}
+                                    height={128}
                                 />
                             </div>
                         </div>
