@@ -15,26 +15,33 @@ export default function Acordeon({ preguntas }) {
   return (
     <div className="divide-y divide-gray-200">
       {preguntas.map((item, index) => (
-        <div key={index} className="py-4 px-4 sm:px-6">
+        <div key={index} className="py-5 px-6 hover:bg-gray-50 transition-colors">
           <button
             className="w-full flex justify-between items-center text-left focus:outline-none"
             onClick={() => togglePregunta(index)}
+            aria-expanded={preguntaAbierta === index}
           >
             <span className="text-lg font-medium text-gray-900">
               {item.pregunta}
             </span>
-            {preguntaAbierta === index ? (
-              <ChevronUpIcon className="h-5 w-5 text-gray-500" />
-            ) : (
-              <ChevronDownIcon className="h-5 w-5 text-gray-500" />
-            )}
+            <span className="ml-6 flex-shrink-0">
+              {preguntaAbierta === index ? (
+                <ChevronUpIcon className="h-6 w-6 text-indigo-600 transition-transform duration-300" />
+              ) : (
+                <ChevronDownIcon className="h-6 w-6 text-indigo-600 transition-transform duration-300" />
+              )}
+            </span>
           </button>
           
-          {preguntaAbierta === index && (
-            <div className="mt-3 text-base text-gray-700 bg-gray-50 p-4 rounded-md">
+          <div
+            className={`overflow-hidden transition-all duration-300 ease-in-out ${
+              preguntaAbierta === index ? 'max-h-96 opacity-100 mt-4' : 'max-h-0 opacity-0'
+            }`}
+          >
+            <div className="text-base text-gray-700 bg-indigo-50 p-5 rounded-xl border-l-4 border-indigo-500">
               {item.respuesta}
             </div>
-          )}
+          </div>
         </div>
       ))}
     </div>

@@ -160,7 +160,7 @@ export default function CommentForm({ tutorId, email }) {
                         <textarea
                             id="comment"
                             rows={4}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm text-gray-900"
                             placeholder="Comparte tu experiencia con este profesor..."
                             value={commentText}
                             onChange={handleInputChange}
