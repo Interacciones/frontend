@@ -1,10 +1,15 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 
-function Filter({ setFilter }) {
-  const [course, setCourse] = useState('');
-  const [idSubject, setIdSubject] = useState('');
+function Filter({ setFilter, initialFilter = { course: '', idSubject: '' } }) {
+  const [course, setCourse] = useState(initialFilter.course || '');
+  const [idSubject, setIdSubject] = useState(initialFilter.idSubject || '');
   const [areas, setAreas] = useState([]);
+
+  useEffect(() => {
+    setCourse(initialFilter.course || '');
+    setIdSubject(initialFilter.idSubject || '');
+  }, [initialFilter]);
 
   useEffect(() => {
     const fetchAreas = async () => {
@@ -32,6 +37,11 @@ function Filter({ setFilter }) {
 
   const handleFilter = () => {
     setFilter({ course, idSubject });
+  };
+
+  const handlePopularFilter = (courseName) => {
+    setCourse(courseName);
+    setFilter({ course: courseName, idSubject });
   };
 
   return (
@@ -95,19 +105,19 @@ function Filter({ setFilter }) {
           <span className="text-sm font-medium text-gray-700 mr-3">Filtros populares:</span>
           <div className="flex flex-wrap gap-2">
             <button 
-              onClick={() => {setCourse('Cálculo I'); handleFilter();}}
+              onClick={() => handlePopularFilter('Cálculo I')}
               className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 hover:bg-indigo-200"
             >
               Cálculo I
             </button>
             <button 
-              onClick={() => {setCourse('Física'); handleFilter();}}
+              onClick={() => handlePopularFilter('Optimización')}
               className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 hover:bg-indigo-200"
             >
-              Física
+              Optimización
             </button>
             <button 
-              onClick={() => {setCourse('Programación'); handleFilter();}}
+              onClick={() => handlePopularFilter('Programación')}
               className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 hover:bg-indigo-200"
             >
               Programación

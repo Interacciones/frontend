@@ -5,6 +5,7 @@ import ReportTeacher from "./ReportTeacher";
 import Link from "next/link";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
+import { useRouter } from "next/router";
 
 function renderDescription(description) {
     const lines = description.split('\n');
@@ -16,6 +17,7 @@ export default function TeacherInfo({ teacher }) {
     const [isReportTeacherOpen, setIsReportTeacherOpen] = useState(false);
     const { user } = UserAuth();
     const [belongsToUser, setBelongsToUser] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
         onAuthStateChanged(auth, (currentUser) => {
@@ -23,6 +25,20 @@ export default function TeacherInfo({ teacher }) {
             setBelongsToUser(currentUser.email === teacher.email);
         });
     }, [teacher.email]);
+
+    const handleCourseClick = (course) => {
+        router.push({
+            pathname: '/profesores',
+            query: { course }
+        }, undefined, { shallow: false });
+    };
+
+    const handleSubjectClick = (subjectId) => {
+        router.push({
+            pathname: '/profesores',
+            query: { idSubject: subjectId }
+        }, undefined, { shallow: false });
+    };
 
     return (
         <div className='relative w-full max-w-7xl mx-auto rounded-xl shadow-xl overflow-hidden transform transition-all'>
@@ -100,11 +116,13 @@ export default function TeacherInfo({ teacher }) {
                             </h2>
                             <div className='flex flex-wrap gap-2'>
                                 {teacher.courses.map((ramo) => (
-                                    <Link key={ramo} href={`/profesores?course=${ramo}`}>
-                                        <span className='inline-block px-3 py-1 rounded-full bg-yellow-400 text-indigo-900 text-sm font-medium hover:bg-yellow-300 transition-colors'>
-                                            {ramo}
-                                        </span>
-                                    </Link>
+                                    <button
+                                        key={ramo}
+                                        onClick={() => handleCourseClick(ramo)}
+                                        className='inline-block px-3 py-1 rounded-full bg-yellow-400 text-indigo-900 text-sm font-medium hover:bg-yellow-300 transition-colors'
+                                    >
+                                        {ramo}
+                                    </button>
                                 ))}
                             </div>
                         </div>
@@ -119,11 +137,13 @@ export default function TeacherInfo({ teacher }) {
                             </h2>
                             <div className='flex flex-wrap gap-2'>
                                 {teacher.subjects.map((subject) => (
-                                    <Link key={subject.id} href={`/profesores?idSubject=${subject.id}`}>
-                                        <span className='inline-block px-3 py-1 rounded-full bg-yellow-400 text-indigo-900 text-sm font-medium hover:bg-yellow-300 transition-colors'>
-                                            {subject.subject}
-                                        </span>
-                                    </Link>
+                                    <button
+                                        key={subject.id}
+                                        onClick={() => handleSubjectClick(subject.id)}
+                                        className='inline-block px-3 py-1 rounded-full bg-yellow-400 text-indigo-900 text-sm font-medium hover:bg-yellow-300 transition-colors'
+                                    >
+                                        {subject.subject}
+                                    </button>
                                 ))}
                             </div>
                         </div>
