@@ -86,10 +86,19 @@ function Contact() {
         throw new Error(response.statusText);
       }
 
-      setMessage('Mensaje enviado');
+      setMessage('Mensaje enviado correctamente. Nos pondremos en contacto contigo pronto.');
       setOpen(true);
+      if (!user) {
+        setName('');
+        setLastName('');
+        setEmail('');
+      }
+      setContent('');
+      setCharCount(0);
     } catch (error) {
       console.error(error.message);
+      setMessage('Ha ocurrido un error al enviar el mensaje. Por favor, inténtalo de nuevo.');
+      setOpen(true);
     }
   };
 
@@ -102,7 +111,139 @@ function Contact() {
   };
 
   return (
-    <>
+    <div className="bg-white min-h-screen flex flex-col">
+      <Header />
+      
+      {/* Hero Section */}
+      <div className="relative bg-indigo-800 overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://interac-ciones.s3.us-east-1.amazonaws.com/university_example.jpg')] bg-cover bg-center bg-no-repeat opacity-10"></div>
+        <div className="relative max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold text-white sm:text-5xl">
+              Contáctanos
+            </h1>
+            <p className="mt-4 text-xl text-indigo-100 max-w-3xl mx-auto">
+              Estamos aquí para responder tus dudas y escuchar tus sugerencias
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      {/* Contact Form Section */}
+      <div className="flex-grow bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-2xl mx-auto">
+          <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <div className="p-6 sm:p-10">
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+                  <div>
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                      Nombre
+                    </label>
+                    <div className="mt-1">
+                      <input
+                        id="name"
+                        name="name"
+                        type="text"
+                        required
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="block w-full rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 disabled:bg-gray-100 disabled:text-gray-500 text-gray-900"
+                        placeholder="Tu nombre"
+                        disabled={loading || !!(user && user.emailVerified)}
+                      />
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
+                      Apellido
+                    </label>
+                    <div className="mt-1">
+                      <input
+                        id="lastName"
+                        name="lastName"
+                        type="text"
+                        required
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        className="block w-full rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 disabled:bg-gray-100 disabled:text-gray-500 text-gray-900"
+                        placeholder="Tu apellido"
+                        disabled={loading || !!(user && user.emailVerified)}
+                      />
+                    </div>
+                  </div>
+                </div>
+                
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                    Correo Electrónico
+                  </label>
+                  <div className="mt-1">
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="block w-full rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 disabled:bg-gray-100 disabled:text-gray-500 text-gray-900"
+                      placeholder="tu@email.com"
+                      disabled={loading || !!(user && user.emailVerified)}
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <label htmlFor="content" className="block text-sm font-medium text-gray-700">
+                    Mensaje
+                  </label>
+                  <div className="mt-1 relative">
+                    <textarea
+                      id="content"
+                      name="content"
+                      required
+                      value={content}
+                      onChange={handleContentChange}
+                      rows={6}
+                      className="block w-full rounded-md border-gray-300 py-3 px-4 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-gray-900"
+                      placeholder="Escribe tu mensaje aquí..."
+                      maxLength={maxCharCount}
+                    />
+                    <div className="absolute bottom-3 right-3 text-sm text-gray-500">
+                      {charCount}/{maxCharCount}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="pt-2">
+                  <button
+                    type="submit"
+                    className="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-indigo-800 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all"
+                  >
+                    Enviar mensaje
+                  </button>
+                </div>
+                
+              </form>
+              
+              {/* Contact Info */}
+              <div className="mt-10 pt-6 border-t border-gray-200">
+                <div className="flex items-center text-indigo-800">
+                  <svg className="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  <span className="text-gray-700">equipo.interacciones@gmail.com</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <Footer />
+      
+      {/* Dialog for success/error messages */}
       <Dialog open={open} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
@@ -110,107 +251,10 @@ function Contact() {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cerrar</Button>
+          <Button onClick={handleClose} style={{ color: '#4338CA' }}>Cerrar</Button>
         </DialogActions>
       </Dialog>
-      <div className="min-h-screen bg-gray-100">
-        <Header />
-        <div className="min-h-full flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-lg w-full space-y-8">
-            <div>
-              <h2 className="mt-6 text-center text-4xl font-extrabold text-gray-900">
-                Contacto
-              </h2>
-            </div>
-            <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-              <div className="rounded-md shadow-sm -space-y-px">
-                <div className="mb-4">
-                  <label htmlFor="name" className="sr-only">
-                    Nombre
-                  </label>
-                  <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    required
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                    placeholder="Nombre"
-                    disabled={loading || !!(user && user.emailVerified)}
-                  />
-                </div>
-              </div>
-              <div className="rounded-md shadow-sm -space-y-px">
-                <div className="mb-4">
-                  <label htmlFor="lastName" className="sr-only">
-                    Apellido
-                  </label>
-                  <input
-                    id="lastName"
-                    name="lastName"
-                    type="text"
-                    required
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                    placeholder="Apellido"
-                    disabled={loading || !!(user && user.emailVerified)}
-                  />
-                </div>
-              </div>
-              <div className="rounded-md shadow-sm -space-y-px">
-                <div className="mb-4">
-                  <label htmlFor="email" className="sr-only">
-                    Correo Electrónico
-                  </label>
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                    placeholder="Correo Electrónico"
-                    disabled={loading || !!(user && user.emailVerified)}
-                  />
-                </div>
-              </div>
-              <div className="rounded-md shadow-sm -space-y-px">
-                <div className="mb-4 relative">
-                  <label htmlFor="content" className="sr-only">
-                    Mensaje
-                  </label>
-                  <textarea
-                    id="content"
-                    name="content"
-                    required
-                    value={content}
-                    onChange={handleContentChange}
-                    className="appearance-none rounded-none relative block w-full h-28 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                    placeholder="Mensaje"
-                    maxLength={maxCharCount}
-                  />
-                  <div className="absolute bottom-2 right-2 text-gray-500 text-sm">
-                    {charCount}/{maxCharCount}
-                  </div>
-                </div>
-              </div>
-              <div>
-                <button
-                  type="submit"
-                  className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                  Enviar
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-      <Footer />
-    </>
+    </div>
   );
 }
 

@@ -12,19 +12,12 @@ import Button from '@mui/material/Button';
 function Star({ filled, onClick }) {
     return (
         <svg
-            className={`h-6 w-6 text-yellow-500 ${filled ? 'fill-current' : 'stroke-current'} cursor-pointer`}
+            className={`h-7 w-7 ${filled ? 'text-yellow-400 fill-current' : 'text-gray-300 fill-current hover:text-gray-400'} cursor-pointer transition duration-150`}
             xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="none"
-            stroke="currentColor"
+            viewBox="0 0 24 24"
             onClick={onClick}
         >
-            <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="1.5"
-                d="M10 1l1.912 4.67 4.864.353-3.575 3.107.993 4.839-4.194-2.48-4.194 2.48.993-4.839-3.575-3.107 4.864-.353L10 1z"
-            />
+            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
         </svg>
     );
 }
@@ -131,7 +124,7 @@ export default function CommentForm({ tutorId, email }) {
 
     if (user && !belongsToUser && isVerified) {
         return (
-            <div className="px-4">
+            <div className="bg-white rounded-xl shadow-md overflow-hidden mb-6">
                 <Dialog open={open} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
@@ -142,45 +135,76 @@ export default function CommentForm({ tutorId, email }) {
                         <Button onClick={handleClose}>Cerrar</Button>
                     </DialogActions>
                 </Dialog>
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                        <div className="ml-2">
-                            <p className="text-lg font-semibold text-gray-800">
-                                Deja un comentario:
-                            </p>
-                            <div className="flex mt-2">
-                                {stars}
-                            </div>
+                
+                <div className="p-6">
+                    <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                        <svg className="h-5 w-5 text-indigo-800 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+                        </svg>
+                        Escribe una valoración
+                    </h2>
+                    
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            ¿Cómo calificarías a este profesor?
+                        </label>
+                        <div className="flex items-center space-x-1">
+                            {stars}
                         </div>
                     </div>
-                </div>
-                <div className="mt-4">
-                    <textarea className="w-full h-24 px-3 py-2 text-gray-700 border rounded-lg focus:outline-none" placeholder="Escribe tu comentario..." value={commentText} onChange={handleInputChange}></textarea>
-                </div>
-                <div className="mt-3">
-                    <button className="px-3.5 py-2.5 text-sm font-semibold rounded-lg justify-center bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-600 transition-all disabled:bg-yellow-600 disabled:hover:bg-yellow-600 disabled:text-gray-300" type="submit" disabled={isDisabled} onClick={handleSubmit}>
-                        Enviar
+                    
+                    <div className="mb-4">
+                        <label htmlFor="comment" className="block text-sm font-medium text-gray-700 mb-1">
+                            Tu opinión
+                        </label>
+                        <textarea
+                            id="comment"
+                            rows={4}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm text-gray-900"
+                            placeholder="Comparte tu experiencia con este profesor..."
+                            value={commentText}
+                            onChange={handleInputChange}
+                        ></textarea>
+                    </div>
+                    
+                    <button
+                        type="submit"
+                        onClick={handleSubmit}
+                        disabled={isDisabled}
+                        className={`inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-800 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${isDisabled ? 'opacity-50 cursor-not-allowed' : 'transition-colors duration-200'}`}
+                    >
+                        Enviar valoración
                     </button>
                 </div>
             </div>
-        )
+        );
     } else if (user && !isVerified) {
         return (
-            <div className="px-4">
-                <p className="text-lg font-semibold text-gray-800">
-                    Verifica tu correo electrónico para dejar un comentario
-                </p>
+            <div className="bg-white rounded-xl shadow-md overflow-hidden mb-6 p-6">
+                <div className="flex items-center text-amber-600">
+                    <svg className="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                    <p className="text-lg font-semibold">
+                        Verifica tu correo electrónico para dejar un comentario
+                    </p>
+                </div>
             </div>
-        )
+        );
     } else if (belongsToUser) {
-        return (<></>)
+        return null;
     } else {
         return (
-            <div className="px-4">
-                <p className="text-lg font-semibold text-gray-800">
-                    Inicia sesión para dejar un comentario
-                </p>
+            <div className="bg-white rounded-xl shadow-md overflow-hidden mb-6 p-6">
+                <div className="flex items-center text-indigo-800">
+                    <svg className="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+                    </svg>
+                    <p className="text-lg font-semibold">
+                        Inicia sesión para dejar un comentario
+                    </p>
+                </div>
             </div>
-        )
+        );
     }
 }
