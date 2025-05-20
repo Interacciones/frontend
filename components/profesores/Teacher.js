@@ -1,10 +1,22 @@
 import Link from 'next/link'
 import React, { useRef, useEffect, useState } from 'react'
 
-function Star() {
+function FilledStar() {
   return (
       <svg
-          className="h-5 w-5 text-yellow-500 fill-current"
+          className="h-5 w-5 text-yellow-400 fill-current"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+      >
+          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+      </svg>
+  );
+}
+
+function EmptyStar() {
+  return (
+      <svg
+          className="h-5 w-5 text-gray-300 fill-current"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
       >
@@ -86,7 +98,13 @@ function Teacher({ props }) {
   // Detectar si es un dispositivo móvil
   useEffect(() => {
     const checkIfMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      
+      // When on mobile, always allow horizontal scrolling
+      if (mobile && coursesRef.current) {
+        setShouldCenterCourses(false);
+      }
     };
     
     checkIfMobile();
@@ -139,8 +157,8 @@ function Teacher({ props }) {
           <div className="flex items-center justify-center mb-3">
             <div className="flex items-center">
               {[...Array(5)].map((_, i) => (
-                <span key={i} className={i < Math.floor(rating) ? "text-yellow-400" : "text-gray-300"}>
-                  <Star />
+                <span key={i}>
+                  {i < Math.floor(rating) ? <FilledStar /> : <EmptyStar />}
                 </span>
               ))}
             </div>
@@ -161,7 +179,7 @@ function Teacher({ props }) {
             <div 
               ref={coursesRef}
               onScroll={checkArrows}
-              className={`w-full flex ${shouldCenterCourses ? 'justify-center' : 'justify-start'} overflow-x-auto scrollbar-hide gap-1.5 py-2 px-2`}
+              className={`w-full flex ${shouldCenterCourses ? 'justify-center' : 'justify-start'} overflow-x-auto scrollbar-hide gap-1.5 py-2 px-2 ${isMobile ? 'touch-pan-x' : ''}`}
             >
               <style jsx>{`
                 .scrollbar-hide::-webkit-scrollbar {
@@ -173,6 +191,7 @@ function Teacher({ props }) {
                 }
               `}</style>
               
+
               {props.coursesInfo.map((ramo, index) => (
                 <span 
                   key={index} 
