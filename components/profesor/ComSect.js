@@ -1,9 +1,42 @@
-import React from "react";
+import React, { useState } from "react";
 import Comment from "./Comment";
 import CommentForm from "./ComForm";
 import Resume from "./ComResume";
 
-export default function CommentSection({ id, average, comments, email, reviewAmount, oneStarReviews, twoStarReviews, threeStarReviews, fourStarReviews, fiveStarReviews }) {
+export default function CommentSection({ id, average, comments: initialComments, email, reviewAmount, oneStarReviews, twoStarReviews, threeStarReviews, fourStarReviews, fiveStarReviews }) {
+    const [comments, setComments] = useState(initialComments);
+    const [stats, setStats] = useState({
+        average,
+        reviewAmount,
+        oneStarReviews,
+        twoStarReviews,
+        threeStarReviews,
+        fourStarReviews,
+        fiveStarReviews
+    });
+
+    const refreshComments = async () => {
+        try {
+            // Fetch updated comments and stats
+            const response = await fetch(`https://interaccionesuni.com/tutors/${id}`);
+            const data = await response.json();
+            if (response.ok) {
+                setComments(data.data.comments || []);
+                setStats({
+                    average: data.data.avgRating,
+                    reviewAmount: data.data.reviewAmount,
+                    oneStarReviews: data.data.oneStarReviews,
+                    twoStarReviews: data.data.twoStarReviews,
+                    threeStarReviews: data.data.threeStarReviews,
+                    fourStarReviews: data.data.fourStarReviews,
+                    fiveStarReviews: data.data.fiveStarReviews
+                });
+            }
+        } catch (error) {
+            console.error("Error fetching updated comments:", error);
+        }
+    };
+
     const sortedComments = comments.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
     return (
@@ -15,9 +48,9 @@ export default function CommentSection({ id, average, comments, email, reviewAmo
                 Valoraciones y comentarios
             </h2>
             
-            <CommentForm tutorId={id} email={email} />
+            <CommentForm tutorId={id} email={email} onCommentAdded={refreshComments} />
             
-            {comments?.length === 0 ? (
+            {sortedComments?.length === 0 ? (
                 <div className="bg-white rounded-xl shadow-md p-10 text-center">
                     <div className="inline-block mb-4 p-3 bg-indigo-100 rounded-full">
                         <svg className="h-10 w-10 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -30,13 +63,13 @@ export default function CommentSection({ id, average, comments, email, reviewAmo
             ) : (
                 <>
                     <Resume 
-                        average={average} 
-                        reviewAmount={reviewAmount} 
-                        oneStarReviews={oneStarReviews} 
-                        twoStarReviews={twoStarReviews} 
-                        threeStarReviews={threeStarReviews} 
-                        fourStarReviews={fourStarReviews} 
-                        fiveStarReviews={fiveStarReviews} 
+                        average={stats.average} 
+                        reviewAmount={stats.reviewAmount} 
+                        oneStarReviews={stats.oneStarReviews} 
+                        twoStarReviews={stats.twoStarReviews} 
+                        threeStarReviews={stats.threeStarReviews} 
+                        fourStarReviews={stats.fourStarReviews} 
+                        fiveStarReviews={stats.fiveStarReviews} 
                     />
                     
                     <div className="mt-8">

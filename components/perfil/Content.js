@@ -4,6 +4,7 @@ import { UserAuth } from '../context/AuthContext';
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 export default function TeacherInfo({ user }) {
     const fullName = user && user.name && user.lastName ? `${user.name} ${user.lastName}` : '';
@@ -11,6 +12,7 @@ export default function TeacherInfo({ user }) {
     const [belongsToUser, setBelongsToUser] = useState(false);
     const [tutorId, setTutorId] = useState(null);
     const [tutorPhoto, setTutorPhoto] = useState(null);
+    const router = useRouter();
 
     useEffect(() => {
         onAuthStateChanged(auth, (currentUser) => {
@@ -46,9 +48,9 @@ export default function TeacherInfo({ user }) {
 
     const handleButtonClick = () => {
         if (tutorId) {
-            window.location.href = `/profesores/${tutorId}`;
+            router.push(`/profesores/${tutorId}`);
         } else {
-            window.location.href = '/postular';
+            router.push('/postular');
         }
     };
 

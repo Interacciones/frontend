@@ -22,7 +22,7 @@ function Star({ filled, onClick }) {
     );
 }
 
-export default function CommentForm({ tutorId, email }) {
+export default function CommentForm({ tutorId, email, onCommentAdded }) {
     const { user } = UserAuth();
     const [commentText, setCommentText] = useState("");
     const [rating, setRating] = useState(0);
@@ -108,7 +108,9 @@ export default function CommentForm({ tutorId, email }) {
 
     const handleClose = () => {
         setOpen(false);
-        window.location.reload();
+        if (onCommentAdded) {
+            onCommentAdded();
+        }
     };
 
     const stars = [];
