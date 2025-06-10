@@ -13,6 +13,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
+import { useRouter } from 'next/router';
 
 export default function Perfil() {
     const [user, setUser] = useState(null);
@@ -20,10 +21,11 @@ export default function Perfil() {
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState('');
     const [route, setRoute] = useState('');
+    const router = useRouter();
 
     const handleClose = () => {
         setOpen(false);
-        window.location.href = route;
+        router.push(route);
     };
 
     useEffect(() => {
