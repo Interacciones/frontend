@@ -45,7 +45,7 @@ function Login() {
           password
         );
         
-        await fetch((`https://interaccionesuni.com/users`), {
+        await fetch((`https://interserver.lat/users`), {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

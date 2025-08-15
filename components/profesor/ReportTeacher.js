@@ -32,7 +32,7 @@ function ReportTeacher({ onClose, teacher }) {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await fetch(`${"https://interaccionesuni.com"}/reports/tutor`, {
+            const response = await fetch(`${"https://interserver.lat"}/reports/tutor`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

@@ -25,7 +25,7 @@ export default function TeacherInfo({ user }) {
         const checkTutorProfile = async () => {
             if (!currentUser) return;
             try {
-                const response = await fetch(`https://interaccionesuni.com/tutors-self`, {
+                const response = await fetch(`https://interserver.lat/tutors-self`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

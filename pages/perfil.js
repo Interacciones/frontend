@@ -41,7 +41,7 @@ export default function Perfil() {
             } else {
                 const getData = async () => {
                     try {
-                        const userRes = await fetch(`https://interaccionesuni.com/users-self`, {
+                        const userRes = await fetch(`https://interserver.lat/users-self`, {
                             method: 'GET',
                             headers: {
                                 'Content-Type': 'application/json',

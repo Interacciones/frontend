@@ -26,7 +26,7 @@ function Profesores() {
         idSubject: filterParams.idSubject || '',
       }).toString();
 
-      const res = await fetch(`https://interaccionesuni.com/tutors?${queryParams}`, {
+      const res = await fetch(`https://interserver.lat/tutors?${queryParams}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
