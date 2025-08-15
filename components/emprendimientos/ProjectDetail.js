@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 import { UserAuth } from '../context/AuthContext';
 import Link from "next/link";
+import CommentsSection from './CommentsSection';
+import ReportProjectModal from './ReportProjectModal';
 
 function ArrowLeft() {
   return (
@@ -57,6 +59,7 @@ function renderDescription(description) {
 function ProjectDetail({ id, project }) {
     const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
     const { user } = UserAuth();
+    const [isReportOpen, setIsReportOpen] = useState(false);
 
     if (!project) {
         return (
@@ -91,6 +94,9 @@ function ProjectDetail({ id, project }) {
 
     return (
         <div className='min-h-screen flex flex-wrap text-black bg-gray-100 justify-start'>
+            {isReportOpen && (
+                <ReportProjectModal onClose={() => setIsReportOpen(false)} projectId={project.id} />
+            )}
             <div className='bg-indigo-800 text-white rounded-3xl m-6 p-5 w-full sm:m-9 sm:p-7 lg:m-12 lg:p-8 flex flex-wrap justify-between'>
                 <div className='w-full m-0 p-0 flex flex-wrap sm:h-fit lg:w-[30%]'>
                     <div className="w-full h-fit text-center">
@@ -151,10 +157,18 @@ function ProjectDetail({ id, project }) {
                 </div>
                 
                 <div className='w-full mt-4 sm:w-full sm:min-h-[65%] lg:w-[65%] lg:my-2 lg:mr-4'>
+                    <div className='w-full flex justify-end mb-2'>
+                        {user && (
+                            <button onClick={() => setIsReportOpen(true)} className='bg-red-600 hover:bg-red-700 text-white font-medium py-1.5 px-3 rounded-md'>
+                                Reportar emprendimiento
+                            </button>
+                        )}
+                    </div>
                     <div className='my-2'>
                         <p className='text-lg font-bold w-full text-left mb-1'>Descripción:</p>
                         {renderDescription(project.description)}
                     </div>
+                    <CommentsSection projectId={id} />
                 </div>
             </div>
         </div>

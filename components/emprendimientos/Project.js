@@ -70,7 +70,7 @@ function Project({ props }) {
   };
 
   return (
-    <Link href={`emprendimientos/${props.id}`} className='relative overflow-hidden group cursor-pointer bg-indigo-800 text-white rounded-[30px] p-6 h-80 w-80'>
+    <Link href={`/emprendimientos/${props.id}`} className='relative overflow-hidden group cursor-pointer bg-indigo-800 text-white rounded-[30px] p-6 h-80 w-80'>
         <div className='absolute inset-0 w-full h-full bg-indigo-900/20 transition-opacity opacity-0 group-hover:opacity-100'></div>
         
         {/* Photo display */}

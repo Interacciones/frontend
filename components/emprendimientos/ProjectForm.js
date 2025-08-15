@@ -67,7 +67,6 @@ function ProjectForm() {
       formData.append("description", description);
       formData.append("instagramProfile", instagramProfile);
       formData.append("showContact", showContact);
-      formData.append("isActive", true);
       
       // Append each photo to the formData
       photos.forEach((photo, index) => {
@@ -86,7 +85,7 @@ function ProjectForm() {
         throw new Error(response.statusText);
       }
 
-      setMessage('¡Emprendimiento publicado exitosamente!');
+      setMessage('¡Emprendimiento enviado! Quedará pendiente de aprobación.');
       setRoute('/emprendimientos');
       setOpen(true);
     } catch (error) {
