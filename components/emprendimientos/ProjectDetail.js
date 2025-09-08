@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { UserAuth } from '../context/AuthContext';
 import Link from "next/link";
 import CommentsSection from './CommentsSection';
@@ -60,6 +60,34 @@ function ProjectDetail({ id, project }) {
     const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
     const { user } = UserAuth();
     const [isReportOpen, setIsReportOpen] = useState(false);
+    const [isOwner, setIsOwner] = useState(false);
+
+    useEffect(() => {
+        const checkOwnership = async () => {
+            try {
+                if (!user) return;
+                const res = await fetch('http://localhost:3000/projects-self', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Cache-Control': 'no-cache',
+                        'Pragma': 'no-cache',
+                        'Authorization': `Bearer ${user.stsTokenManager.accessToken}`
+                    }
+                });
+                if (!res.ok) return;
+                const data = await res.json();
+                if (data?.data?.id && String(data.data.id) === String(id)) {
+                    setIsOwner(true);
+                } else {
+                    setIsOwner(false);
+                }
+            } catch (e) {
+                setIsOwner(false);
+            }
+        };
+        checkOwnership();
+    }, [user, id]);
 
     if (!project) {
         return (
@@ -94,7 +122,7 @@ function ProjectDetail({ id, project }) {
 
     return (
         <div className='min-h-screen flex flex-wrap text-black bg-gray-100 justify-start'>
-            {isReportOpen && (
+            {isReportOpen && !isOwner && (
                 <ReportProjectModal onClose={() => setIsReportOpen(false)} projectId={project.id} />
             )}
             <div className='bg-indigo-800 text-white rounded-3xl m-6 p-5 w-full sm:m-9 sm:p-7 lg:m-12 lg:p-8 flex flex-wrap justify-between'>
@@ -159,15 +187,32 @@ function ProjectDetail({ id, project }) {
                 <div className='w-full mt-4 sm:w-full sm:min-h-[65%] lg:w-[65%] lg:my-2 lg:mr-4'>
                     <div className='w-full flex justify-end mb-2'>
                         {user && (
-                            <button onClick={() => setIsReportOpen(true)} className='bg-red-600 hover:bg-red-700 text-white font-medium py-1.5 px-3 rounded-md'>
-                                Reportar emprendimiento
-                            </button>
+                            isOwner ? (
+                                <Link href={`/editar-emprendimiento`} className='inline-flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-1.5 px-3 rounded-md'>
+                                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5h2m-1 0v14m9-7H3" />
+                                    </svg>
+                                    Editar emprendimiento
+                                </Link>
+                            ) : (
+                                <button onClick={() => setIsReportOpen(true)} className='inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-medium py-1.5 px-3 rounded-md'>
+                                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                    </svg>
+                                    Reportar emprendimiento
+                                </button>
+                            )
                         )}
                     </div>
                     <div className='my-2'>
                         <p className='text-lg font-bold w-full text-left mb-1'>Descripción:</p>
                         {renderDescription(project.description)}
                     </div>
+                </div>
+            </div>
+            {/* Comments section outside of the blue container for better readability */}
+            <div className='w-full px-6 sm:px-9 lg:px-12 mb-8'>
+                <div className='bg-white rounded-2xl p-5 shadow-sm'>
                     <CommentsSection projectId={id} />
                 </div>
             </div>

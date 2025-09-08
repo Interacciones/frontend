@@ -31,7 +31,7 @@ export default function ReportCommentModal({ onClose, commentId }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch('https://interaccionesuni.com/reports/project-comment', {
+      const response = await fetch('http://localhost:3000/reports/project-comment', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

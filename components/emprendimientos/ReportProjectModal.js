@@ -33,7 +33,7 @@ export default function ReportProjectModal({ onClose, projectId }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch('https://interaccionesuni.com/reports/project', {
+      const response = await fetch('http://localhost:3000/reports/project', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

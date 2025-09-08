@@ -14,7 +14,7 @@ export default function CommentsSection({ projectId }) {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch(`https://interaccionesuni.com/projects/${projectId}/comments?cacheBuster=${new Date().getTime()}`, {
+      const res = await fetch(`http://localhost:3000/projects/${projectId}/comments?cacheBuster=${new Date().getTime()}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -41,8 +41,8 @@ export default function CommentsSection({ projectId }) {
   }, [projectId, fetchComments]);
 
   return (
-    <div className="w-full mt-6">
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4">Comentarios</h2>
+    <div className="w-full mt-2">
+      <h2 className="text-2xl font-bold text-indigo-900 mb-4">Comentarios</h2>
 
       {user && (
         <div className="mb-6">
@@ -51,13 +51,13 @@ export default function CommentsSection({ projectId }) {
       )}
 
       {loading && (
-        <p className="text-gray-700">Cargando comentarios...</p>
+        <p className="text-gray-800">Cargando comentarios...</p>
       )}
       {error && !loading && (
         <p className="text-red-600">{error}</p>
       )}
       {!loading && !error && comments.length === 0 && (
-        <p className="text-gray-700">Aún no hay comentarios. ¡Sé el primero en comentar!</p>
+        <p className="text-gray-800">Aún no hay comentarios. ¡Sé el primero en comentar!</p>
       )}
 
       <div className="space-y-4">

@@ -25,6 +25,7 @@ function ProjectForm() {
   const [message, setMessage] = useState('');
   const [route, setRoute] = useState('');
   const [descriptionCharCount, setDescriptionCharCount] = useState(0);
+  const [submitting, setSubmitting] = useState(false);
   const maxCharCount = 2000;
   const maxPhotos = 5;
   const { user } = UserAuth();
@@ -62,6 +63,7 @@ function ProjectForm() {
     }
     
     try {
+      setSubmitting(true);
       const formData = new FormData();
       formData.append("name", name);
       formData.append("description", description);
@@ -73,7 +75,7 @@ function ProjectForm() {
         formData.append(`photo${index}`, photo);
       });
 
-      const response = await fetch('https://interaccionesuni.com/projects', {
+      const response = await fetch('http://localhost:3000/projects', {
         method: 'POST',
         body: formData,
         headers: {
@@ -92,6 +94,8 @@ function ProjectForm() {
       console.error(error);
       setMessage('Error al publicar el emprendimiento. Inténtalo nuevamente.');
       setOpen(true);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -142,6 +146,11 @@ function ProjectForm() {
       
       {user && (
         <>
+          {submitting && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
+              <RouteLoader />
+            </div>
+          )}
           <div className="min-h-screen bg-gray-100">
             <Header />
             <div className="min-h-full flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
@@ -281,9 +290,10 @@ function ProjectForm() {
                   <div>
                     <button
                       type="submit"
-                      className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                      disabled={submitting}
+                      className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white ${submitting ? 'bg-indigo-400' : 'bg-indigo-600 hover:bg-indigo-700'} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
                     >
-                      Publicar emprendimiento
+                      {submitting ? 'Publicando…' : 'Publicar emprendimiento'}
                     </button>
                   </div>
                 </form>

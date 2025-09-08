@@ -17,6 +17,7 @@ import { useRouter } from 'next/router';
 
 export default function Perfil() {
     const [user, setUser] = useState(null);
+    const [project, setProject] = useState(null);
     const [loaded, setLoaded] = useState(false);
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState('');
@@ -41,17 +42,39 @@ export default function Perfil() {
             } else {
                 const getData = async () => {
                     try {
-                        const userRes = await fetch(`https://interaccionesuni.com/users-self`, {
-                            method: 'GET',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Cache-Control': 'no-cache',
-                                'Pragma': 'no-cache',
-                                'Authorization': `Bearer ${currentUser.stsTokenManager.accessToken}`
-                            }
-                        });
+                        const [userRes, projectRes] = await Promise.all([
+                            fetch(`http://localhost:3000/users-self`, {
+                                method: 'GET',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Cache-Control': 'no-cache',
+                                    'Pragma': 'no-cache',
+                                    'Authorization': `Bearer ${currentUser.stsTokenManager.accessToken}`
+                                }
+                            }),
+                            fetch(`http://localhost:3000/projects-self`, {
+                                method: 'GET',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Cache-Control': 'no-cache',
+                                    'Pragma': 'no-cache',
+                                    'Authorization': `Bearer ${currentUser.stsTokenManager.accessToken}`
+                                }
+                            })
+                        ]);
+
                         const userData = await userRes.json();
                         setUser(userData.data);
+
+                        if (projectRes.ok) {
+                            const projectData = await projectRes.json();
+                            setProject(projectData.data || null);
+                        } else if (projectRes.status === 404) {
+                            setProject(null);
+                        } else {
+                            // Leave project as null if an unexpected error occurs
+                            setProject(null);
+                        }
                         setLoaded(true);
                     } catch (error) {
                         console.error(error);
@@ -77,7 +100,7 @@ export default function Perfil() {
             {loaded ? (
                 <>
                     <Header />
-                    <Page user={user} />
+                    <Page user={user} project={project} />
                     <Footer />
                 </>
             ) : (
