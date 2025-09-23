@@ -44,7 +44,7 @@ export default function Perfil() {
                 const getData = async () => {
                     try {
                         const [userRes, projectRes] = await Promise.all([
-                            fetch(`http://localhost:3000/users-self`, {
+                            fetch(`https://interserver.lat/users-self`, {
                                 method: 'GET',
                                 headers: {
                                     'Content-Type': 'application/json',
@@ -53,7 +53,7 @@ export default function Perfil() {
                                     'Authorization': `Bearer ${currentUser.stsTokenManager.accessToken}`
                                 }
                             }),
-                            fetch(`http://localhost:3000/projects-self`, {
+                            fetch(`https://interserver.lat/projects-self`, {
                                 method: 'GET',
                                 headers: {
                                     'Content-Type': 'application/json',

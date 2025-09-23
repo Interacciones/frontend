@@ -32,7 +32,7 @@ const ReportModal = ({ onClose, commentId, commentCreator }) => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await fetch(`${"http://localhost:3000"}/reports/review`, {
+            const response = await fetch(`${"https://interserver.lat"}/reports/review`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

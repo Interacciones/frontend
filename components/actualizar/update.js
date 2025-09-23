@@ -48,7 +48,7 @@ function Actualizar() {
     const fetchProfile = async (currentUser) => {
       try {
         setInitialLoading(true);
-        const response = await fetch(`http://localhost:3000/tutors-self`, {
+        const response = await fetch(`https://interserver.lat/tutors-self`, {
           method: 'GET',
           headers: {
             "Content-Type": "application/json",
@@ -73,7 +73,7 @@ function Actualizar() {
 
     const fetchSubjects = async () => {
       try {
-        const response = await fetch('http://localhost:3000/subjects');
+        const response = await fetch('https://interserver.lat/subjects');
         const data = await response.json();
         if (response.ok) {
           setSubjects(data.data.map(subject => subject.subject));
@@ -124,7 +124,7 @@ function Actualizar() {
         formData.append("changedPhoto", true);
       }
   
-      const response = await fetch(`http://localhost:3000/own-tutor`, {
+      const response = await fetch(`https://interserver.lat/own-tutor`, {
         method: 'PATCH',
         body: formData,
         headers: {

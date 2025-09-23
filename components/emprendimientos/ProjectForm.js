@@ -80,7 +80,7 @@ function ProjectForm() {
         formData.append(`photo${index}`, photo);
       });
 
-      const response = await fetch('http://localhost:3000/projects', {
+      const response = await fetch('https://interserver.lat/projects', {
         method: 'POST',
         body: formData,
         headers: {

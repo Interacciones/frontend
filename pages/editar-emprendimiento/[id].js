@@ -35,7 +35,7 @@ function EditProjectContent() {
       if (!user || !id) return;
       try {
         // Verify ownership by listing self projects and finding the one with id
-        const res = await fetch('http://localhost:3000/projects-self', {
+        const res = await fetch('https://interserver.lat/projects-self', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -104,7 +104,7 @@ function EditProjectContent() {
         formData.append(`photo${index}`, photo);
       });
 
-      const res = await fetch(`http://localhost:3000/projects/${project.id}`, {
+      const res = await fetch(`https://interserver.lat/projects/${project.id}`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${user.stsTokenManager.accessToken}`
@@ -127,7 +127,7 @@ function EditProjectContent() {
   const handleDelete = async () => {
     if (!project) return;
     try {
-      const res = await fetch(`http://localhost:3000/projects/${project.id}`, {
+      const res = await fetch(`https://interserver.lat/projects/${project.id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${user.stsTokenManager.accessToken}`

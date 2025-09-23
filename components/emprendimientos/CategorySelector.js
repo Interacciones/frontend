@@ -9,7 +9,7 @@ export default function CategorySelector({ selectedIds = [], onChange }) {
     const fetchCategories = async () => {
       setLoading(true);
       try {
-        const res = await fetch('http://localhost:3000/categories', {
+        const res = await fetch('https://interserver.lat/categories', {
           headers: { 'Content-Type': 'application/json' }
         });
         const data = await res.json();

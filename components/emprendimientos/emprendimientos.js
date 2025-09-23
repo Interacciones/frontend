@@ -24,7 +24,7 @@ function Emprendimientos() {
         if (categoryId) qp.categoryId = categoryId;
         const queryParams = new URLSearchParams(qp).toString();
 
-        const res = await fetch(`http://localhost:3000/projects?${queryParams}`, {
+        const res = await fetch(`https://interserver.lat/projects?${queryParams}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

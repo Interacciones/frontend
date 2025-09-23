@@ -14,7 +14,7 @@ export default function CommentsSection({ projectId }) {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch(`http://localhost:3000/projects/${projectId}/comments?cacheBuster=${new Date().getTime()}`, {
+      const res = await fetch(`https://interserver.lat/projects/${projectId}/comments?cacheBuster=${new Date().getTime()}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

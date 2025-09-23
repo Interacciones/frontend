@@ -66,7 +66,7 @@ export default function CommentForm({ tutorId, email }) {
         }
 
         try {
-            const response = await fetch(`${"http://localhost:3000"}/reviews`, {
+            const response = await fetch(`${"https://interserver.lat"}/reviews`, {
                 method: "POST",
                 headers: {
                     'Authorization': `Bearer ${user.stsTokenManager.accessToken}`,

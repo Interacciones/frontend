@@ -66,7 +66,7 @@ function ProjectDetail({ id, project }) {
         const checkOwnership = async () => {
             try {
                 if (!user) return;
-                const res = await fetch('http://localhost:3000/projects-self', {
+                const res = await fetch('https://interserver.lat/projects-self', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

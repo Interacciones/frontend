@@ -19,7 +19,7 @@ export default function Profesor() {
         const getData = async () => {
             if (!id) return;
             try {
-                const teacherRes = await fetch(`http://localhost:3000/tutors/${id}?cacheBuster=${new Date().getTime()}`,
+                const teacherRes = await fetch(`https://interserver.lat/tutors/${id}?cacheBuster=${new Date().getTime()}`,
                     {
                         method: 'GET',
                         headers: {

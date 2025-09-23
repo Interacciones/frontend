@@ -36,7 +36,7 @@ export default function ProjectCommentForm({ projectId, parentCommentId = null, 
       return;
     }
     try {
-      const response = await fetch(`http://localhost:3000/projects/${projectId}/comments`, {
+      const response = await fetch(`https://interserver.lat/projects/${projectId}/comments`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${user.stsTokenManager.accessToken}`,
