@@ -6,7 +6,7 @@ export default function Grid({ projects, totalCount, cantidad, pagina, setPagina
   return (
     <>
       {projects.length === 0 ? (
-        <div className='my-auto mx-auto font-medium w-full text-2xl md:text-3xl lg:text-4xl lg:text-left lg:max-w-[55%]'>
+        <div className='my-auto mx-auto font-medium w-full text-2xl md:text-3xl lg:text-4xl lg:text-left lg:max-w-[55%] text-gray-900'>
           <span className='font-bold'>¡Ups! </span>No se encontraron emprendimientos. Inténtalo de nuevo más tarde.
         </div>
       ) : (
