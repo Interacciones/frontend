@@ -92,7 +92,7 @@ function Profesores() {
   const totalPages = Math.ceil(totalCount / quantity);
 
   return (
-    <div className="bg-white min-h-screen flex flex-col">
+    <div className="bg-gray-50 min-h-screen flex flex-col">
       <Header />
       
       {/* Hero Section */}
