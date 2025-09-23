@@ -56,9 +56,7 @@ export default function CommentsSection({ projectId }) {
       {error && !loading && (
         <p className="text-red-600">{error}</p>
       )}
-      {!loading && !error && comments.length === 0 && (
-        <p className="text-gray-800">Aún no hay comentarios. ¡Sé el primero en comentar!</p>
-      )}
+      {/* When there are no comments, we simply render nothing instead of prompting */}
 
       <div className="space-y-4">
         {comments.map((comment) => (

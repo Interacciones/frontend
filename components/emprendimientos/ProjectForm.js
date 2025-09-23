@@ -13,6 +13,7 @@ import { auth } from "../firebase";
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import RouteLoader from '../components/RouteLoader';
+import CategorySelector from './CategorySelector';
 
 function ProjectForm() {
   const [name, setName] = useState('');
@@ -26,6 +27,7 @@ function ProjectForm() {
   const [route, setRoute] = useState('');
   const [descriptionCharCount, setDescriptionCharCount] = useState(0);
   const [submitting, setSubmitting] = useState(false);
+  const [categoryIds, setCategoryIds] = useState([]);
   const maxCharCount = 2000;
   const maxPhotos = 5;
   const { user } = UserAuth();
@@ -69,6 +71,9 @@ function ProjectForm() {
       formData.append("description", description);
       formData.append("instagramProfile", instagramProfile);
       formData.append("showContact", showContact);
+      if (categoryIds && categoryIds.length > 0) {
+        formData.append("categoryIds", JSON.stringify(categoryIds));
+      }
       
       // Append each photo to the formData
       photos.forEach((photo, index) => {
@@ -224,6 +229,13 @@ function ProjectForm() {
                         />
                       </div>
                     </div>
+                  </div>
+
+                  {/* Categorías */}
+                  <div className="rounded-md shadow-sm -space-y-px">
+                    <h3 className="text-black text-sm font-semibold mb-1">Categorías</h3>
+                    <p className="text-gray-600 text-sm mb-2">Selecciona una o más categorías que describan tu emprendimiento.</p>
+                    <CategorySelector selectedIds={categoryIds} onChange={setCategoryIds} />
                   </div>
 
                   {/* Mostrar información de contacto */}

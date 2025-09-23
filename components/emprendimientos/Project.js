@@ -77,7 +77,7 @@ function Project({ props }) {
         <div className='relative h-40 w-full mb-4'>
           {props.photos && props.photos.length > 0 ? (
             <img 
-              src={props.photos[currentPhotoIndex]} 
+              src={(props.photos[currentPhotoIndex]?.url) || props.photos[currentPhotoIndex]} 
               alt={props.name} 
               className='w-full h-full object-cover rounded-lg'
             />
@@ -111,9 +111,26 @@ function Project({ props }) {
         
         {/* Instagram profile centered */}
         {props.instagramProfile && (
-          <div className='flex items-center justify-center gap-1 mt-auto'>
+          <a
+            href={`https://instagram.com/${String(props.instagramProfile).replace('@','')}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className='flex items-center justify-center gap-1 mt-auto hover:underline'
+            onClick={(e) => e.stopPropagation()}
+          >
             <InstagramIcon />
             <span className='text-sm'>@{props.instagramProfile}</span>
+          </a>
+        )}
+
+        {/* Categories */}
+        {Array.isArray(props.categories) && props.categories.length > 0 && (
+          <div className='mt-2 flex flex-wrap justify-center gap-1'>
+            {props.categories.map((c) => (
+              <Link key={c.id} href={`/emprendimientos?categoryId=${c.id}`} className='px-2 py-0.5 text-[10px] font-medium rounded bg-yellow-400 text-indigo-900 hover:bg-yellow-300' onClick={(e)=> e.stopPropagation()}>
+                {c.name}
+              </Link>
+            ))}
           </div>
         )}
     </Link>

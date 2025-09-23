@@ -14,10 +14,11 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 export default function Perfil() {
     const [user, setUser] = useState(null);
-    const [project, setProject] = useState(null);
+    const [projects, setProjects] = useState([]);
     const [loaded, setLoaded] = useState(false);
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState('');
@@ -68,12 +69,9 @@ export default function Perfil() {
 
                         if (projectRes.ok) {
                             const projectData = await projectRes.json();
-                            setProject(projectData.data || null);
-                        } else if (projectRes.status === 404) {
-                            setProject(null);
+                            setProjects(Array.isArray(projectData.data) ? projectData.data : []);
                         } else {
-                            // Leave project as null if an unexpected error occurs
-                            setProject(null);
+                            setProjects([]);
                         }
                         setLoaded(true);
                     } catch (error) {
@@ -100,7 +98,7 @@ export default function Perfil() {
             {loaded ? (
                 <>
                     <Header />
-                    <Page user={user} project={project} />
+                    <Page user={user} projects={projects} />
                     <Footer />
                 </>
             ) : (

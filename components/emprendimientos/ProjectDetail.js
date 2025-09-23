@@ -77,11 +77,9 @@ function ProjectDetail({ id, project }) {
                 });
                 if (!res.ok) return;
                 const data = await res.json();
-                if (data?.data?.id && String(data.data.id) === String(id)) {
-                    setIsOwner(true);
-                } else {
-                    setIsOwner(false);
-                }
+                const myProjects = Array.isArray(data?.data) ? data.data : [];
+                const ownsThis = myProjects.some((p) => String(p.id) === String(id));
+                setIsOwner(ownsThis);
             } catch (e) {
                 setIsOwner(false);
             }
@@ -133,7 +131,7 @@ function ProjectDetail({ id, project }) {
                                 <>
                                     <img 
                                         className='w-full h-full object-cover' 
-                                        src={project.photos[currentPhotoIndex]} 
+                                        src={(project.photos[currentPhotoIndex]?.url) || project.photos[currentPhotoIndex]} 
                                         alt={project.name}
                                     />
                                     {/* Navigation arrows for photos */}
@@ -165,10 +163,24 @@ function ProjectDetail({ id, project }) {
                     
                     {project.instagramProfile && (
                         <div className='flex mt-5 flex-wrap px-2 h-fit justify-center w-full mx-auto'>
-                            <div className='flex items-center justify-center text-yellow-400 my-1'>
+                            <a
+                                href={`https://instagram.com/${String(project.instagramProfile).replace('@','')}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className='flex items-center justify-center text-yellow-400 my-1 hover:underline'
+                            >
                                 <InstagramIcon />
                                 <span className='ml-2'>@{project.instagramProfile}</span>
-                            </div>
+                            </a>
+                        </div>
+                    )}
+                    {Array.isArray(project.categories) && project.categories.length > 0 && (
+                        <div className='flex flex-wrap gap-2 mt-3 justify-center px-2'>
+                            {project.categories.map((c) => (
+                                <Link key={c.id} href={`/emprendimientos?categoryId=${c.id}`} className='px-2 py-1 text-xs font-medium rounded bg-yellow-400 text-indigo-900 hover:bg-yellow-300'>
+                                    {c.name}
+                                </Link>
+                            ))}
                         </div>
                     )}
                     
@@ -188,7 +200,7 @@ function ProjectDetail({ id, project }) {
                     <div className='w-full flex justify-end mb-2'>
                         {user && (
                             isOwner ? (
-                                <Link href={`/editar-emprendimiento`} className='inline-flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-1.5 px-3 rounded-md'>
+                                <Link href={`/editar-emprendimiento/${id}`} className='inline-flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-1.5 px-3 rounded-md'>
                                     <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5h2m-1 0v14m9-7H3" />
                                     </svg>
