@@ -83,6 +83,16 @@ export default function Header() {
                             Buscar Profesor Particular
                         </Link>
                         <Link 
+                            href="/emprendimientos" 
+                            className={`text-sm font-semibold leading-6 px-3 py-2 rounded-full transition-all ${
+                                router.pathname === '/emprendimientos' 
+                                    ? 'text-white bg-indigo-600' 
+                                    : 'text-indigo-100 hover:bg-indigo-700/50'
+                            }`}
+                        >
+                            Emprendimientos
+                        </Link>
+                        <Link 
                             href="/preguntas" 
                             className={`text-sm font-semibold leading-6 px-3 py-2 rounded-full transition-all ${
                                 router.pathname === '/preguntas' 
@@ -152,10 +162,7 @@ export default function Header() {
                 <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
                     <div className="flex items-center justify-between">
                         <Link href="/" className="-m-1.5 p-1.5" onClick={() => setMobileMenuOpen(false)}>
-                            <div className="flex items-center gap-2">
-                                <div className="bg-indigo-800 h-8 w-8 rounded-full flex items-center justify-center">
-                                    <span className="text-white font-bold text-lg">I</span>
-                                </div>
+                            <div className="flex items-center">
                                 <span className="text-indigo-800 text-xl font-bold">INTERACCIONES</span>
                             </div>
                         </Link>
@@ -182,6 +189,17 @@ export default function Header() {
                                     onClick={() => setMobileMenuOpen(false)}
                                 >
                                     Buscar Profesor Particular
+                                </Link>
+                                <Link 
+                                    href="/emprendimientos" 
+                                    className={`-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 ${
+                                        router.pathname === '/emprendimientos' 
+                                            ? 'bg-indigo-50 text-indigo-800' 
+                                            : 'text-gray-900 hover:bg-gray-50'
+                                    }`}
+                                    onClick={() => setMobileMenuOpen(false)}
+                                >
+                                    Emprendimientos
                                 </Link>
                                 <Link 
                                     href="/preguntas" 

@@ -5,8 +5,9 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
-export default function TeacherInfo({ user }) {
+export default function TeacherInfo({ user, projects = [] }) {
     const fullName = user && user.name && user.lastName ? `${user.name} ${user.lastName}` : '';
     const { user: currentUser } = UserAuth();
     const [belongsToUser, setBelongsToUser] = useState(false);
@@ -25,7 +26,7 @@ export default function TeacherInfo({ user }) {
         const checkTutorProfile = async () => {
             if (!currentUser) return;
             try {
-                const response = await fetch(`https://interaccionesuni.com/tutors-self`, {
+                const response = await fetch(`https://interserver.lat/tutors-self`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -124,6 +125,60 @@ export default function TeacherInfo({ user }) {
                                         >
                                             {tutorId ? 'Ver mi perfil de profesor' : 'Convertirme en profesor particular'}
                                         </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Entrepreneurship Projects */}
+                            <div className="mt-8">
+                                <div className="bg-indigo-50 rounded-xl p-6">
+                                    <div className="text-center">
+                                        <h2 className="text-xl font-semibold text-gray-900">Mis emprendimientos</h2>
+                                        {projects.length === 0 ? (
+                                            <>
+                                                <p className="mt-2 text-gray-600">Aún no tienes emprendimientos publicados.</p>
+                                                <div className="mt-5">
+                                                    <Link href="/postular-emprendimiento" className="px-8 py-3 font-medium rounded-full bg-gradient-to-r from-indigo-800 to-indigo-700 text-white hover:from-indigo-700 hover:to-indigo-600 shadow-md transition-all">
+                                                        Publicar mi emprendimiento
+                                                    </Link>
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <div className="mt-5 space-y-4 text-left">
+                                                {projects.map((project) => (
+                                                    <div key={project.id} className="rounded-2xl border border-indigo-100 bg-white p-4">
+                                                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                                                            <div>
+                                                                <p className="text-indigo-900 font-semibold leading-tight">{project.name}</p>
+                                                                <p className="text-indigo-800/90 text-sm">{project.instagramProfile ? `@${project.instagramProfile}` : ''}</p>
+                                                                <div className="mt-1 text-sm">
+                                                                    {project.isActive ? (
+                                                                        <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-green-800">Aprobado</span>
+                                                                    ) : (
+                                                                        <span className="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-yellow-800">Pendiente de aprobación</span>
+                                                                    )}
+                                                                </div>
+                                                            </div>
+                                                            <div className="flex gap-3">
+                                                                {project.isActive && (
+                                                                    <Link href={`/emprendimientos/${project.id}`} className="inline-flex items-center px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700">
+                                                                        Ver
+                                                                    </Link>
+                                                                )}
+                                                                <Link href={`/editar-emprendimiento/${project.id}`} className="inline-flex items-center px-4 py-2 rounded-md bg-white text-indigo-700 border border-indigo-200 hover:bg-indigo-50">
+                                                                    Editar
+                                                                </Link>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                                <div className="pt-6 flex justify-center">
+                                                    <Link href="/postular-emprendimiento" className="inline-flex items-center px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700">
+                                                        Publicar nuevo emprendimiento
+                                                    </Link>
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>

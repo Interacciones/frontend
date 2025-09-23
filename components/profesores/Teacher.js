@@ -100,11 +100,6 @@ function Teacher({ props }) {
     const checkIfMobile = () => {
       const mobile = window.innerWidth < 768;
       setIsMobile(mobile);
-      
-      // When on mobile, always allow horizontal scrolling
-      if (mobile && coursesRef.current) {
-        setShouldCenterCourses(false);
-      }
     };
     
     checkIfMobile();
@@ -119,11 +114,13 @@ function Teacher({ props }) {
     if (coursesRef.current) {
       // Comprobar si los cursos exceden el ancho del contenedor
       const container = coursesRef.current;
-      const totalWidth = Array.from(container.children).reduce(
-        (sum, child) => sum + child.offsetWidth + 8, 0);
-      
-      setShouldCenterCourses(totalWidth <= container.offsetWidth);
-      setShowRightArrow(!isMobile && totalWidth > container.offsetWidth);
+      const children = Array.from(container.children);
+      const totalWidth = children.reduce((sum, child) => sum + child.offsetWidth + 8, 0);
+
+      // Si la suma de chips no llena el contenedor, centramos
+      const shouldCenter = totalWidth <= container.offsetWidth;
+      setShouldCenterCourses(shouldCenter);
+      setShowRightArrow(!isMobile && !shouldCenter);
       
       container.addEventListener('scroll', checkArrows);
       
@@ -179,7 +176,7 @@ function Teacher({ props }) {
             <div 
               ref={coursesRef}
               onScroll={checkArrows}
-              className={`w-full flex ${shouldCenterCourses ? 'justify-center' : 'justify-start'} overflow-x-auto scrollbar-hide gap-1.5 py-2 px-2 ${isMobile ? 'touch-pan-x' : ''}`}
+              className={`w-full flex ${shouldCenterCourses ? 'justify-center' : 'justify-start'} overflow-x-auto scrollbar-hide gap-1.5 py-2 px-2 ${isMobile ? 'touch-pan-x' : ''} group-hover:overflow-x-auto`}
             >
               <style jsx>{`
                 .scrollbar-hide::-webkit-scrollbar {
@@ -214,8 +211,8 @@ function Teacher({ props }) {
         </div>
         
         {/* Overlay con botón de ver perfil */}
-        <div className="absolute inset-0 bg-indigo-900 bg-opacity-80 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
-          <span className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-indigo-900 bg-white hover:bg-indigo-50 transition-all">
+        <div className="absolute inset-0 bg-indigo-900 bg-opacity-80 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 pointer-events-none">
+          <span className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-indigo-900 bg-white hover:bg-indigo-50 transition-all pointer-events-auto">
             Ver perfil
           </span>
         </div>

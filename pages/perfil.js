@@ -14,9 +14,11 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 export default function Perfil() {
     const [user, setUser] = useState(null);
+    const [projects, setProjects] = useState([]);
     const [loaded, setLoaded] = useState(false);
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState('');
@@ -41,17 +43,36 @@ export default function Perfil() {
             } else {
                 const getData = async () => {
                     try {
-                        const userRes = await fetch(`https://interaccionesuni.com/users-self`, {
-                            method: 'GET',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Cache-Control': 'no-cache',
-                                'Pragma': 'no-cache',
-                                'Authorization': `Bearer ${currentUser.stsTokenManager.accessToken}`
-                            }
-                        });
+                        const [userRes, projectRes] = await Promise.all([
+                            fetch(`https://interserver.lat/users-self`, {
+                                method: 'GET',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Cache-Control': 'no-cache',
+                                    'Pragma': 'no-cache',
+                                    'Authorization': `Bearer ${currentUser.stsTokenManager.accessToken}`
+                                }
+                            }),
+                            fetch(`https://interserver.lat/projects-self`, {
+                                method: 'GET',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Cache-Control': 'no-cache',
+                                    'Pragma': 'no-cache',
+                                    'Authorization': `Bearer ${currentUser.stsTokenManager.accessToken}`
+                                }
+                            })
+                        ]);
+
                         const userData = await userRes.json();
                         setUser(userData.data);
+
+                        if (projectRes.ok) {
+                            const projectData = await projectRes.json();
+                            setProjects(Array.isArray(projectData.data) ? projectData.data : []);
+                        } else {
+                            setProjects([]);
+                        }
                         setLoaded(true);
                     } catch (error) {
                         console.error(error);
@@ -77,7 +98,7 @@ export default function Perfil() {
             {loaded ? (
                 <>
                     <Header />
-                    <Page user={user} />
+                    <Page user={user} projects={projects} />
                     <Footer />
                 </>
             ) : (

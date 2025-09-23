@@ -1,7 +1,9 @@
 'use client';
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { UserAuth } from '../context/AuthContext';
 import Link from "next/link";
+import CommentsSection from './CommentsSection';
+import ReportProjectModal from './ReportProjectModal';
 
 function ArrowLeft() {
   return (
@@ -57,6 +59,33 @@ function renderDescription(description) {
 function ProjectDetail({ id, project }) {
     const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
     const { user } = UserAuth();
+    const [isReportOpen, setIsReportOpen] = useState(false);
+    const [isOwner, setIsOwner] = useState(false);
+
+    useEffect(() => {
+        const checkOwnership = async () => {
+            try {
+                if (!user) return;
+                const res = await fetch('https://interserver.lat/projects-self', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Cache-Control': 'no-cache',
+                        'Pragma': 'no-cache',
+                        'Authorization': `Bearer ${user.stsTokenManager.accessToken}`
+                    }
+                });
+                if (!res.ok) return;
+                const data = await res.json();
+                const myProjects = Array.isArray(data?.data) ? data.data : [];
+                const ownsThis = myProjects.some((p) => String(p.id) === String(id));
+                setIsOwner(ownsThis);
+            } catch (e) {
+                setIsOwner(false);
+            }
+        };
+        checkOwnership();
+    }, [user, id]);
 
     if (!project) {
         return (
@@ -91,6 +120,9 @@ function ProjectDetail({ id, project }) {
 
     return (
         <div className='min-h-screen flex flex-wrap text-black bg-gray-100 justify-start'>
+            {isReportOpen && !isOwner && (
+                <ReportProjectModal onClose={() => setIsReportOpen(false)} projectId={project.id} />
+            )}
             <div className='bg-indigo-800 text-white rounded-3xl m-6 p-5 w-full sm:m-9 sm:p-7 lg:m-12 lg:p-8 flex flex-wrap justify-between'>
                 <div className='w-full m-0 p-0 flex flex-wrap sm:h-fit lg:w-[30%]'>
                     <div className="w-full h-fit text-center">
@@ -99,7 +131,7 @@ function ProjectDetail({ id, project }) {
                                 <>
                                     <img 
                                         className='w-full h-full object-cover' 
-                                        src={project.photos[currentPhotoIndex]} 
+                                        src={(project.photos[currentPhotoIndex]?.url) || project.photos[currentPhotoIndex]} 
                                         alt={project.name}
                                     />
                                     {/* Navigation arrows for photos */}
@@ -131,10 +163,24 @@ function ProjectDetail({ id, project }) {
                     
                     {project.instagramProfile && (
                         <div className='flex mt-5 flex-wrap px-2 h-fit justify-center w-full mx-auto'>
-                            <div className='flex items-center justify-center text-yellow-400 my-1'>
+                            <a
+                                href={`https://instagram.com/${String(project.instagramProfile).replace('@','')}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className='flex items-center justify-center text-yellow-400 my-1 hover:underline'
+                            >
                                 <InstagramIcon />
                                 <span className='ml-2'>@{project.instagramProfile}</span>
-                            </div>
+                            </a>
+                        </div>
+                    )}
+                    {Array.isArray(project.categories) && project.categories.length > 0 && (
+                        <div className='flex flex-wrap gap-2 mt-3 justify-center px-2'>
+                            {project.categories.map((c) => (
+                                <Link key={c.id} href={`/emprendimientos?categoryId=${c.id}`} className='px-2 py-1 text-xs font-medium rounded bg-yellow-400 text-indigo-900 hover:bg-yellow-300'>
+                                    {c.name}
+                                </Link>
+                            ))}
                         </div>
                     )}
                     
@@ -151,10 +197,35 @@ function ProjectDetail({ id, project }) {
                 </div>
                 
                 <div className='w-full mt-4 sm:w-full sm:min-h-[65%] lg:w-[65%] lg:my-2 lg:mr-4'>
+                    <div className='w-full flex justify-end mb-2'>
+                        {user && (
+                            isOwner ? (
+                                <Link href={`/editar-emprendimiento/${id}`} className='inline-flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-1.5 px-3 rounded-md'>
+                                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5h2m-1 0v14m9-7H3" />
+                                    </svg>
+                                    Editar emprendimiento
+                                </Link>
+                            ) : (
+                                <button onClick={() => setIsReportOpen(true)} className='inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-medium py-1.5 px-3 rounded-md'>
+                                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                    </svg>
+                                    Reportar emprendimiento
+                                </button>
+                            )
+                        )}
+                    </div>
                     <div className='my-2'>
                         <p className='text-lg font-bold w-full text-left mb-1'>Descripción:</p>
                         {renderDescription(project.description)}
                     </div>
+                </div>
+            </div>
+            {/* Comments section outside of the blue container for better readability */}
+            <div className='w-full px-6 sm:px-9 lg:px-12 mb-8'>
+                <div className='bg-white rounded-2xl p-5 shadow-sm'>
+                    <CommentsSection projectId={id} />
                 </div>
             </div>
         </div>

@@ -13,6 +13,7 @@ import { auth } from "../firebase";
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import RouteLoader from '../components/RouteLoader';
+import CategorySelector from './CategorySelector';
 
 function ProjectForm() {
   const [name, setName] = useState('');
@@ -25,6 +26,8 @@ function ProjectForm() {
   const [message, setMessage] = useState('');
   const [route, setRoute] = useState('');
   const [descriptionCharCount, setDescriptionCharCount] = useState(0);
+  const [submitting, setSubmitting] = useState(false);
+  const [categoryIds, setCategoryIds] = useState([]);
   const maxCharCount = 2000;
   const maxPhotos = 5;
   const { user } = UserAuth();
@@ -62,19 +65,22 @@ function ProjectForm() {
     }
     
     try {
+      setSubmitting(true);
       const formData = new FormData();
       formData.append("name", name);
       formData.append("description", description);
       formData.append("instagramProfile", instagramProfile);
       formData.append("showContact", showContact);
-      formData.append("isActive", true);
+      if (categoryIds && categoryIds.length > 0) {
+        formData.append("categoryIds", JSON.stringify(categoryIds));
+      }
       
       // Append each photo to the formData
       photos.forEach((photo, index) => {
         formData.append(`photo${index}`, photo);
       });
 
-      const response = await fetch('https://interaccionesuni.com/projects', {
+      const response = await fetch('https://interserver.lat/projects', {
         method: 'POST',
         body: formData,
         headers: {
@@ -86,13 +92,15 @@ function ProjectForm() {
         throw new Error(response.statusText);
       }
 
-      setMessage('¡Emprendimiento publicado exitosamente!');
+      setMessage('¡Emprendimiento enviado! Quedará pendiente de aprobación.');
       setRoute('/emprendimientos');
       setOpen(true);
     } catch (error) {
       console.error(error);
       setMessage('Error al publicar el emprendimiento. Inténtalo nuevamente.');
       setOpen(true);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -143,6 +151,11 @@ function ProjectForm() {
       
       {user && (
         <>
+          {submitting && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
+              <RouteLoader />
+            </div>
+          )}
           <div className="min-h-screen bg-gray-100">
             <Header />
             <div className="min-h-full flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
@@ -218,6 +231,13 @@ function ProjectForm() {
                     </div>
                   </div>
 
+                  {/* Categorías */}
+                  <div className="rounded-md shadow-sm -space-y-px">
+                    <h3 className="text-black text-sm font-semibold mb-1">Categorías</h3>
+                    <p className="text-gray-600 text-sm mb-2">Selecciona una o más categorías que describan tu emprendimiento.</p>
+                    <CategorySelector selectedIds={categoryIds} onChange={setCategoryIds} />
+                  </div>
+
                   {/* Mostrar información de contacto */}
                   <div className="flex items-center mb-2">
                     <input
@@ -282,9 +302,10 @@ function ProjectForm() {
                   <div>
                     <button
                       type="submit"
-                      className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                      disabled={submitting}
+                      className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white ${submitting ? 'bg-indigo-400' : 'bg-indigo-600 hover:bg-indigo-700'} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
                     >
-                      Publicar emprendimiento
+                      {submitting ? 'Publicando…' : 'Publicar emprendimiento'}
                     </button>
                   </div>
                 </form>

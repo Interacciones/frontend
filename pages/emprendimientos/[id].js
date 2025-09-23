@@ -18,7 +18,7 @@ export default function Emprendimiento() {
         const getData = async () => {
             if (!id) return;
             try {
-                const projectRes = await fetch(`https://interaccionesuni.com/projects/${id}?cacheBuster=${new Date().getTime()}`,
+                const projectRes = await fetch(`https://interserver.lat/projects/${id}?cacheBuster=${new Date().getTime()}`,
                     {
                         method: 'GET',
                         headers: {
