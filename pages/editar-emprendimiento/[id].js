@@ -14,6 +14,20 @@ import { UserAuth } from '../../components/context/AuthContext';
 import { useRouter } from 'next/router';
 import CategorySelector from '../../components/emprendimientos/CategorySelector';
 
+// Helper function to fix S3 URLs with dots in bucket names
+function fixS3Url(url) {
+  if (!url || typeof url !== 'string') return url;
+  
+  // Check if it's an S3 virtual-hosted-style URL with dots in bucket name
+  const match = url.match(/^https?:\/\/([^.]+\.[^.]+)\.s3\.([^.]+)\.amazonaws\.com\/(.+)$/);
+  if (match) {
+    const [, bucket, region, key] = match;
+    // Convert to path-style URL
+    return `https://s3.${region}.amazonaws.com/${bucket}/${key}`;
+  }
+  return url;
+}
+
 function EditProjectContent() {
   const { user } = UserAuth();
   const router = useRouter();
@@ -191,7 +205,7 @@ function EditProjectContent() {
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                       {project.photos.map((p, idx) => (
                         <label key={idx} className="block">
-                          <img src={p.url || p} alt="Foto actual" className="h-24 w-full object-cover rounded-md" />
+                          <img src={fixS3Url(p.url || p)} alt="Foto actual" className="h-24 w-full object-cover rounded-md" />
                           {p.id && (
                             <div className="mt-1 text-sm text-gray-700">
                               <input type="checkbox" checked={photosToKeep.includes(p.id)} onChange={() => toggleKeepPhoto(p.id)} className="mr-2" />
