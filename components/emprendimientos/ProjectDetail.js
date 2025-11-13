@@ -5,6 +5,20 @@ import Link from "next/link";
 import CommentsSection from './CommentsSection';
 import ReportProjectModal from './ReportProjectModal';
 
+// Helper function to fix S3 URLs with dots in bucket names
+function fixS3Url(url) {
+  if (!url || typeof url !== 'string') return url;
+  
+  // Check if it's an S3 virtual-hosted-style URL with dots in bucket name
+  const match = url.match(/^https?:\/\/([^.]+\.[^.]+)\.s3\.([^.]+)\.amazonaws\.com\/(.+)$/);
+  if (match) {
+    const [, bucket, region, key] = match;
+    // Convert to path-style URL
+    return `https://s3.${region}.amazonaws.com/${bucket}/${key}`;
+  }
+  return url;
+}
+
 function ArrowLeft() {
   return (
     <svg 
@@ -58,6 +72,7 @@ function renderDescription(description) {
 
 function ProjectDetail({ id, project }) {
     const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
+    const [imageError, setImageError] = useState(false);
     const { user } = UserAuth();
     const [isReportOpen, setIsReportOpen] = useState(false);
     const [isOwner, setIsOwner] = useState(false);
@@ -104,6 +119,7 @@ function ProjectDetail({ id, project }) {
 
     const nextPhoto = () => {
         if (hasMultiplePhotos) {
+            setImageError(false);
             setCurrentPhotoIndex((prev) => 
                 prev === project.photos.length - 1 ? 0 : prev + 1
             );
@@ -112,6 +128,7 @@ function ProjectDetail({ id, project }) {
 
     const prevPhoto = () => {
         if (hasMultiplePhotos) {
+            setImageError(false);
             setCurrentPhotoIndex((prev) => 
                 prev === 0 ? project.photos.length - 1 : prev - 1
             );
@@ -127,12 +144,21 @@ function ProjectDetail({ id, project }) {
                 <div className='w-full m-0 p-0 flex flex-wrap sm:h-fit lg:w-[30%]'>
                     <div className="w-full h-fit text-center">
                         <div className='relative w-full h-64 mx-auto overflow-hidden rounded-lg mb-4'>
-                            {project.photos && project.photos.length > 0 ? (
+                            {project.photos && project.photos.length > 0 && !imageError ? (
                                 <>
                                     <img 
                                         className='w-full h-full object-cover' 
-                                        src={(project.photos[currentPhotoIndex]?.url) || project.photos[currentPhotoIndex]} 
+                                        src={fixS3Url(project.photos[currentPhotoIndex])} 
                                         alt={project.name}
+                                        onError={(e) => {
+                                            console.error('Image failed to load:', project.photos[currentPhotoIndex]);
+                                            console.error('Fixed URL:', fixS3Url(project.photos[currentPhotoIndex]));
+                                            console.error('Error details:', e);
+                                            setImageError(true);
+                                        }}
+                                        onLoad={() => {
+                                            console.log('Image loaded successfully:', fixS3Url(project.photos[currentPhotoIndex]));
+                                        }}
                                     />
                                     {/* Navigation arrows for photos */}
                                     {hasMultiplePhotos && (
@@ -154,7 +180,9 @@ function ProjectDetail({ id, project }) {
                                 </>
                             ) : (
                                 <div className='w-full h-full bg-gray-300 rounded-lg flex items-center justify-center'>
-                                    <span className='text-gray-500'>Sin imagen</span>
+                                    <span className='text-gray-500'>
+                                        {imageError ? 'Error al cargar imagen' : 'Sin imagen'}
+                                    </span>
                                 </div>
                             )}
                         </div>
