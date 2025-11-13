@@ -1,6 +1,20 @@
 import Link from 'next/link';
 import React, { useState } from 'react';
 
+// Helper function to fix S3 URLs with dots in bucket names
+function fixS3Url(url) {
+  if (!url || typeof url !== 'string') return url;
+  
+  // Check if it's an S3 virtual-hosted-style URL with dots in bucket name
+  const match = url.match(/^https?:\/\/([^.]+\.[^.]+)\.s3\.([^.]+)\.amazonaws\.com\/(.+)$/);
+  if (match) {
+    const [, bucket, region, key] = match;
+    // Convert to path-style URL
+    return `https://s3.${region}.amazonaws.com/${bucket}/${key}`;
+  }
+  return url;
+}
+
 function ArrowLeft() {
   return (
     <svg 
@@ -49,11 +63,13 @@ function InstagramIcon() {
 
 function Project({ props }) {
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
+  const [imageError, setImageError] = useState(false);
   const hasMultiplePhotos = props.photos && props.photos.length > 1;
 
   const nextPhoto = (e) => {
     e.preventDefault();
     if (hasMultiplePhotos) {
+      setImageError(false);
       setCurrentPhotoIndex((prev) => 
         prev === props.photos.length - 1 ? 0 : prev + 1
       );
@@ -63,6 +79,7 @@ function Project({ props }) {
   const prevPhoto = (e) => {
     e.preventDefault();
     if (hasMultiplePhotos) {
+      setImageError(false);
       setCurrentPhotoIndex((prev) => 
         prev === 0 ? props.photos.length - 1 : prev - 1
       );
@@ -75,20 +92,31 @@ function Project({ props }) {
         
         {/* Photo display */}
         <div className='relative h-40 w-full mb-4'>
-          {props.photos && props.photos.length > 0 ? (
+          {props.photos && props.photos.length > 0 && !imageError ? (
             <img 
-              src={(props.photos[currentPhotoIndex]?.url) || props.photos[currentPhotoIndex]} 
+              src={fixS3Url(props.photos[currentPhotoIndex])} 
               alt={props.name} 
               className='w-full h-full object-cover rounded-lg'
+              onError={(e) => {
+                console.error('Image failed to load:', props.photos[currentPhotoIndex]);
+                console.error('Fixed URL:', fixS3Url(props.photos[currentPhotoIndex]));
+                console.error('Error details:', e);
+                setImageError(true);
+              }}
+              onLoad={() => {
+                console.log('Image loaded successfully:', fixS3Url(props.photos[currentPhotoIndex]));
+              }}
             />
           ) : (
             <div className='w-full h-full bg-gray-300 rounded-lg flex items-center justify-center'>
-              <span className='text-gray-500'>Sin imagen</span>
+              <span className='text-gray-500 text-xs text-center px-2'>
+                {imageError ? 'Error al cargar imagen' : 'Sin imagen'}
+              </span>
             </div>
           )}
           
           {/* Navigation arrows for photos */}
-          {hasMultiplePhotos && (
+          {hasMultiplePhotos && !imageError && (
             <>
               <button 
                 onClick={prevPhoto}
